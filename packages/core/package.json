@@ -1,0 +1,15 @@
+{
+  "name": "@local/supracortex-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Framework-agnostic core for supracortex. Contains no host imports.",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p ../../tsconfig.json --noEmit"
+  }
+}

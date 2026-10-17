@@ -1,0 +1,58 @@
+# Release-gate workflow — runs in addition to ci.yml on version tags.
+# Verifies supply-chain, attestation, and publishes COMPATIBILITY records.
+name: Release Gates
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  # ── Supply-chain hashing & packed-artifact gate (no publish/attestation) ──
+  attest:
+    name: hash + packed-artifact gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Verify lockfile matches workspace
+        run: pnpm install --frozen-lockfile --check-files
+      - name: Build
+        run: pnpm build
+      - name: Pack tarball
+        run: npm pack --ignore-scripts
+      - name: Hash the tarball
+        run: sha256sum supracortex-*.tgz | tee supracortex.sha256
+      - name: Tarball E2E gate
+        env:
+          SUPRACORTEX_E2E: "1"
+        run: node --test "tests/acceptance/e2e-tarball.test.ts"
+
+  # ── COMPATIBILITY matrix record ──
+  record-compatibility:
+    name: record COMPATIBILITY
+    needs: [attest]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Run full compatibility suite
+        run: pnpm test
+      - name: Verify COMPATIBILITY.md exists
+        run: test -f COMPATIBILITY.md && echo "COMPATIBILITY.md present"

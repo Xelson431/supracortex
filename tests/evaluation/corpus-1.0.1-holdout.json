@@ -1,0 +1,609 @@
+[
+  {
+    "id": "q-exact-001",
+    "query": "TypeScript strict mode",
+    "relevantEntryIds": [
+      "e-0013"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for strict mode",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-002",
+    "query": "pnpm workspaces",
+    "relevantEntryIds": [
+      "e-0014"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for pnpm workspaces",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-003",
+    "query": "sourceReferences",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for sourceReference",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-004",
+    "query": "confidence constraint",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for confidence",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-005",
+    "query": "PostgreSQL RDS AWS",
+    "relevantEntryIds": [
+      "e-0004"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for PostgreSQL",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-006",
+    "query": "JWT verification",
+    "relevantEntryIds": [
+      "e-0006"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for JWT",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-007",
+    "query": "GitHub Actions CI",
+    "relevantEntryIds": [
+      "e-0005"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for GitHub Actions",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-008",
+    "query": "Winston logging",
+    "relevantEntryIds": [
+      "e-0009"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for Winston",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-009",
+    "query": "kebab-case filenames",
+    "relevantEntryIds": [
+      "e-0024"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for kebab-case",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-010",
+    "query": "named exports convention",
+    "relevantEntryIds": [
+      "e-0027"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for named export",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-011",
+    "query": "conventional commits",
+    "relevantEntryIds": [
+      "e-0023"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for conventional commit",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-012",
+    "query": "NFC normalization",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for normalize",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-013",
+    "query": "I prefix interface",
+    "relevantEntryIds": [
+      "e-0029"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for prefix interface",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-014",
+    "query": "bound check validation",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for validation",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-exact-015",
+    "query": "trunk based development",
+    "relevantEntryIds": [
+      "e-0019"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "exact symbol match for trunk-based",
+    "isHoldout": true,
+    "queryClass": "exact-symbol"
+  },
+  {
+    "id": "q-para-001",
+    "query": "how do we bundle our frontend code",
+    "relevantEntryIds": [
+      "e-0003"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "paraphrase of React UI fact",
+    "isHoldout": true,
+    "queryClass": "paraphrase"
+  },
+  {
+    "id": "q-para-002",
+    "query": "what database system are we running",
+    "relevantEntryIds": [
+      "e-0004"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "paraphrase of database fact",
+    "isHoldout": true,
+    "queryClass": "paraphrase"
+  },
+  {
+    "id": "q-para-003",
+    "query": "tell me about the CI pipeline setup",
+    "relevantEntryIds": [
+      "e-0005"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "paraphrase of CI pipeline fact",
+    "isHoldout": true,
+    "queryClass": "paraphrase"
+  },
+  {
+    "id": "q-para-004",
+    "query": "which node version do we target",
+    "relevantEntryIds": [
+      "e-0008"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "paraphrase of Node version fact",
+    "isHoldout": true,
+    "queryClass": "paraphrase"
+  },
+  {
+    "id": "q-para-005",
+    "query": "where are we hosting the app servers",
+    "relevantEntryIds": [
+      "e-0007",
+      "e-0004",
+      "e-0011"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "paraphrase of deployment fact",
+    "isHoldout": true,
+    "queryClass": "paraphrase"
+  },
+  {
+    "id": "q-neg-001",
+    "query": "use MySQL for main database",
+    "relevantEntryIds": [
+      "e-0004"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "MySQL is not used; PostgreSQL is the active corrective fact",
+    "isHoldout": true,
+    "queryClass": "contradiction"
+  },
+  {
+    "id": "q-neg-002",
+    "query": "class components in React",
+    "relevantEntryIds": [
+      "e-0015"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "class components are not preferred; the active convention is function components",
+    "isHoldout": true,
+    "queryClass": "contradiction"
+  },
+  {
+    "id": "q-neg-003",
+    "query": "deploy to Heroku",
+    "relevantEntryIds": [
+      "e-0007"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "not deployed on Heroku; the active Azure deployment fact is corrective evidence",
+    "isHoldout": true,
+    "queryClass": "contradiction"
+  },
+  {
+    "id": "q-neg-004",
+    "query": "use MongoDB as primary datastore",
+    "relevantEntryIds": [
+      "e-0004"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "MongoDB is not the datastore; PostgreSQL is the active corrective fact",
+    "isHoldout": true,
+    "queryClass": "contradiction"
+  },
+  {
+    "id": "q-neg-005",
+    "query": "webpack configuration for production build",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [
+      "e-0064"
+    ],
+    "annotator": "eval-system",
+    "rationale": "webpack is superseded by esbuild",
+    "isHoldout": true,
+    "queryClass": "ambiguous-negative"
+  },
+  {
+    "id": "q-ren-001",
+    "query": "getUserData function",
+    "relevantEntryIds": [
+      "e-0089"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "renamed symbol query — should still find the rename fact",
+    "isHoldout": true,
+    "queryClass": "renamed-symbol"
+  },
+  {
+    "id": "q-ren-002",
+    "query": "DB_HOST env var location",
+    "relevantEntryIds": [
+      "e-0093"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "should find both old and new env var names",
+    "isHoldout": true,
+    "queryClass": "renamed-symbol"
+  },
+  {
+    "id": "q-ren-003",
+    "query": "database port configuration key",
+    "relevantEntryIds": [
+      "e-0092"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "renamed config key",
+    "isHoldout": true,
+    "queryClass": "renamed-symbol"
+  },
+  {
+    "id": "q-chg-001",
+    "query": "what is the logging configuration",
+    "relevantEntryIds": [
+      "e-0009"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "query about logging config which has evidence-stale entry",
+    "isHoldout": true,
+    "queryClass": "changed-file"
+  },
+  {
+    "id": "q-chg-002",
+    "query": "Docker base image version",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [
+      "e-0083"
+    ],
+    "annotator": "eval-system",
+    "rationale": "query about docker image which may have stale evidence",
+    "isHoldout": true,
+    "queryClass": "changed-file"
+  },
+  {
+    "id": "q-chg-003",
+    "query": "config file settings for log level",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [
+      "e-0081"
+    ],
+    "annotator": "eval-system",
+    "rationale": "stale evidence entry about log level should not be returned",
+    "isHoldout": true,
+    "queryClass": "changed-file"
+  },
+  {
+    "id": "q-stale-001",
+    "query": "Docker Hub registry",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [
+      "e-0063"
+    ],
+    "annotator": "eval-system",
+    "rationale": "Docker Hub is stale; migrated to ECR",
+    "isHoldout": true,
+    "queryClass": "stale-evidence"
+  },
+  {
+    "id": "q-stale-002",
+    "query": "CentOS server version",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [
+      "e-0065"
+    ],
+    "annotator": "eval-system",
+    "rationale": "CentOS is stale; migrated to Ubuntu",
+    "isHoldout": true,
+    "queryClass": "stale-evidence"
+  },
+  {
+    "id": "q-stale-003",
+    "query": "t2.micro instance type",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [
+      "e-0070"
+    ],
+    "annotator": "eval-system",
+    "rationale": "t2.micro is stale; upgraded to t3.large",
+    "isHoldout": true,
+    "queryClass": "stale-evidence"
+  },
+  {
+    "id": "q-contr-001",
+    "query": "REST vs GraphQL which one do we use",
+    "relevantEntryIds": [
+      "c-0001",
+      "c-0002"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "contradiction pair should identify both sides",
+    "isHoldout": true,
+    "queryClass": "contradiction"
+  },
+  {
+    "id": "q-contr-002",
+    "query": "our API architecture decision",
+    "relevantEntryIds": [
+      "c-0001",
+      "c-0002"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "API architecture query surfaces contradiction",
+    "isHoldout": true,
+    "queryClass": "contradiction"
+  },
+  {
+    "id": "q-i18n-001",
+    "query": "日本語対応はいつから",
+    "relevantEntryIds": [
+      "e-0084"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "Japanese text query should match i18n entry",
+    "isHoldout": true,
+    "queryClass": "multilingual"
+  },
+  {
+    "id": "q-i18n-002",
+    "query": "Día de los Muertos feature",
+    "relevantEntryIds": [
+      "e-0085"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "accented character query",
+    "isHoldout": true,
+    "queryClass": "multilingual"
+  },
+  {
+    "id": "q-i18n-003",
+    "query": "unicode normalization NFC été",
+    "relevantEntryIds": [
+      "e-0036",
+      "e-0056"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "Unicode normalization query",
+    "isHoldout": true,
+    "queryClass": "multilingual"
+  },
+  {
+    "id": "q-i18n-004",
+    "query": "café menu characters",
+    "relevantEntryIds": [
+      "e-0088"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "café with accented characters",
+    "isHoldout": true,
+    "queryClass": "multilingual"
+  },
+  {
+    "id": "q-i18n-005",
+    "query": "Gödel incompleteness reference",
+    "relevantEntryIds": [
+      "e-0087"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "umlaut characters in query",
+    "isHoldout": true,
+    "queryClass": "multilingual"
+  },
+  {
+    "id": "q-typo-001",
+    "query": "postgress databse",
+    "relevantEntryIds": [
+      "e-0004"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "typo for PostgreSQL database",
+    "isHoldout": true,
+    "queryClass": "typo"
+  },
+  {
+    "id": "q-typo-002",
+    "query": "typescritp strict",
+    "relevantEntryIds": [
+      "e-0013"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "typo for TypeScript strict",
+    "isHoldout": true,
+    "queryClass": "typo"
+  },
+  {
+    "id": "q-typo-003",
+    "query": "authentication JWT tokns",
+    "relevantEntryIds": [
+      "e-0006"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "typo for JWT tokens",
+    "isHoldout": true,
+    "queryClass": "typo"
+  },
+  {
+    "id": "q-typo-004",
+    "query": "koncurrent users limit",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [
+      "e-0073"
+    ],
+    "annotator": "eval-system",
+    "rationale": "typo for concurrent users (disputed entry should not match)",
+    "isHoldout": true,
+    "queryClass": "typo"
+  },
+  {
+    "id": "q-typo-005",
+    "query": "enviroment variables naming",
+    "relevantEntryIds": [
+      "e-0032",
+      "e-0017"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "typo for environment variables",
+    "isHoldout": true,
+    "queryClass": "typo"
+  },
+  {
+    "id": "q-short-001",
+    "query": "database",
+    "relevantEntryIds": [
+      "e-0004",
+      "e-0092"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "single word query on database topic",
+    "isHoldout": true,
+    "queryClass": "short"
+  },
+  {
+    "id": "q-short-002",
+    "query": "security",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "single word query on security topic",
+    "isHoldout": true,
+    "queryClass": "short"
+  },
+  {
+    "id": "q-short-003",
+    "query": "deployment",
+    "relevantEntryIds": [
+      "e-0007"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "short query on deployment",
+    "isHoldout": true,
+    "queryClass": "short"
+  },
+  {
+    "id": "q-short-004",
+    "query": "performance",
+    "relevantEntryIds": [
+      "e-0057"
+    ],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "short query on performance",
+    "isHoldout": true,
+    "queryClass": "short"
+  },
+  {
+    "id": "q-short-005",
+    "query": "testing",
+    "relevantEntryIds": [],
+    "harmfulEntryIds": [],
+    "annotator": "eval-system",
+    "rationale": "short query on testing",
+    "isHoldout": true,
+    "queryClass": "short"
+  }
+]

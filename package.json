@@ -1,0 +1,128 @@
+{
+  "name": "supracortex",
+  "version": "0.2.0",
+  "description": "Local-first, host-agnostic project memory and bounded context for coding agents. MCP stdio server, CLI, and optional OpenCode adapter.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "packageManager": "pnpm@11.9.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xelson431/supracortex.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Xelson431/supracortex/issues"
+  },
+  "homepage": "https://github.com/Xelson431/supracortex#readme",
+  "workspaces": [
+    "packages/*"
+  ],
+  "bin": {
+    "supracortex": "dist/cli.js",
+    "supracortex-mcp": "scripts/supracortex-mcp"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types/src/api.d.ts",
+      "import": "./dist/api.js"
+    },
+    "./protocol": {
+      "types": "./dist/types/src/protocol.d.ts",
+      "import": "./dist/protocol.js"
+    },
+    "./mcp": {
+      "types": "./dist/types/src/mcp.d.ts",
+      "import": "./dist/mcp.js"
+    },
+    "./opencode": {
+      "types": "./dist/types/src/opencode.d.ts",
+      "import": "./dist/opencode.js"
+    },
+    "./opencode-v2": {
+      "types": "./dist/types/src/opencode-v2.d.ts",
+      "import": "./dist/opencode-v2.js"
+    }
+  },
+  "files": [
+    "dist",
+    "templates",
+    "packages/tui/package.json",
+    "packages/tui/dist/tui.js",
+    "packages/tui/dist/tui-v2.js",
+    "scripts/supracortex-mcp",
+    "scripts/launcher-common.sh",
+    "scripts/laya-env.sh",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md",
+    "COMPATIBILITY.md",
+    "INSTALL.md",
+    "MCP_PROTOCOL.md"
+  ],
+  "scripts": {
+    "test": "node --import ./tests/isolate-config.ts --test \"tests/unit/*.test.ts\" \"tests/integration/*.test.ts\" \"tests/acceptance/*.test.ts\" \"tests/compatibility/*.test.ts\" \"tests/evaluation/*.test.ts\"",
+    "test:unit": "node --import ./tests/isolate-config.ts --test \"tests/unit/*.test.ts\"",
+    "test:integration": "node --import ./tests/isolate-config.ts --test \"tests/integration/*.test.ts\"",
+    "test:acceptance": "node --import ./tests/isolate-config.ts --test \"tests/acceptance/*.test.ts\"",
+    "test:live": "SUPRACORTEX_LIVE_HOSTS=1 node --import ./tests/isolate-config.ts --test tests/compatibility/live-hosts.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "biome lint .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "install:plugin": "node ./scripts/install.ts",
+    "uninstall:plugin": "node ./scripts/uninstall.ts",
+    "enable": "node ./scripts/enable.ts",
+    "disable": "node ./scripts/disable.ts",
+    "doctor": "node ./scripts/doctor.ts",
+    "migrate": "node ./scripts/migrate.ts",
+    "bench": "node ./benchmarks/run.ts",
+    "build": "node scripts/build.ts && tsc -p tsconfig.build.json",
+    "prepack": "node scripts/build.ts && tsc -p tsconfig.build.json",
+    "pack:check": "pnpm --filter supracortex pack --dry-run 2>&1 | head -80",
+    "verify": "pnpm run typecheck && pnpm test && pnpm run build && node benchmarks/run.ts && node benchmarks/eval.ts --retriever deterministic --corpus 1.0.1 && node benchmarks/eval.ts --retriever fts5 --corpus 1.0.1",
+    "verify:packed": "SUPRACORTEX_E2E=1 node --import ./tests/isolate-config.ts --test tests/acceptance/e2e-tarball.test.ts"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "memory",
+    "context",
+    "project-memory",
+    "coding-agents",
+    "claude-code",
+    "codex",
+    "opencode"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@opencode-ai/plugin": "1.18.32",
+    "@opencode/plugin": "2.0.16",
+    "@opentui/core": "0.5.12",
+    "@opentui/solid": "0.5.12",
+    "@types/node": "^22.20.1",
+    "esbuild": "0.28.1",
+    "typescript": "5.8.3"
+  },
+  "dependencies": {
+    "@earendil-works/pi-coding-agent": "0.87.1",
+    "@earendil-works/pi-tui": "0.87.1",
+    "@modelcontextprotocol/sdk": "1.29.0",
+    "jsonc-parser": "3.3.1",
+    "zod": "3.25.76",
+    "zod-to-json-schema": "3.25.0"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": "1.18.32"
+  },
+  "peerDependenciesMeta": {
+    "@opencode-ai/plugin": { "optional": true }
+  }
+}

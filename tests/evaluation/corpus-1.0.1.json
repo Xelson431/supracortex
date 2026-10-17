@@ -1,0 +1,4193 @@
+{
+  "version": "1.0.1",
+  "generatedAt": "2026-06-01T00:00:00.000Z",
+  "totalEntries": 93,
+  "totalQueries": 155,
+  "holdoutQueries": 51,
+  "negativeQueries": 103,
+  "entries": [
+    {
+      "id": "c-0001",
+      "kind": "decision",
+      "content": "API must use REST over GraphQL",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.85,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "arch-discussion-01"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "rest"
+      ],
+      "tags": [
+        "api",
+        "contradiction"
+      ],
+      "invalidationRules": [],
+      "supersedes": [
+        "c-0002"
+      ]
+    },
+    {
+      "id": "c-0002",
+      "kind": "decision",
+      "content": "API must not use REST; GraphQL is preferred",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.8,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "arch-discussion-02"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "graphql"
+      ],
+      "tags": [
+        "api",
+        "contradiction"
+      ],
+      "invalidationRules": [],
+      "supersedes": [
+        "c-0001"
+      ]
+    },
+    {
+      "id": "e-0003",
+      "kind": "fact",
+      "content": "Application uses React 19 for UI components",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.81,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "package.json",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "package.json"
+      ],
+      "relatedSymbols": [
+        "React"
+      ],
+      "tags": [
+        "ui",
+        "frontend"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0004",
+      "kind": "fact",
+      "content": "Primary database is PostgreSQL 15 running on AWS RDS",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.76,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "docker-compose.yml",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        },
+        {
+          "kind": "file",
+          "value": "terraform/main.tf",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "docker-compose.yml",
+        "terraform/main.tf"
+      ],
+      "relatedSymbols": [
+        "postgres",
+        "rds"
+      ],
+      "tags": [
+        "database",
+        "infrastructure"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0005",
+      "kind": "fact",
+      "content": "CI pipeline uses GitHub Actions with macos-latest runners",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.84,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": ".github/workflows/ci.yml",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        ".github/workflows/ci.yml"
+      ],
+      "relatedSymbols": [
+        "github-actions"
+      ],
+      "tags": [
+        "ci",
+        "devops"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0006",
+      "kind": "fact",
+      "content": "Authentication uses JWT tokens with 30 expiry",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.66,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/auth.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/auth.ts"
+      ],
+      "relatedSymbols": [
+        "jwt",
+        "verifyToken"
+      ],
+      "tags": [
+        "auth",
+        "security"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0007",
+      "kind": "fact",
+      "content": "Application is deployed on Azure in ap-southeast-1 region",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.91,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "deploy/config.yaml",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "deploy/config.yaml"
+      ],
+      "relatedSymbols": [
+        "deploy"
+      ],
+      "tags": [
+        "infrastructure",
+        "deployment"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0008",
+      "kind": "fact",
+      "content": "Node.js version 22 is required per .nvmrc",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.74,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": ".nvmrc",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        ".nvmrc"
+      ],
+      "relatedSymbols": [
+        "node"
+      ],
+      "tags": [
+        "tooling",
+        "node"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0009",
+      "kind": "fact",
+      "content": "Logging uses Winston with error as default level",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.67,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/logger.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/logger.ts"
+      ],
+      "relatedSymbols": [
+        "winston",
+        "logger"
+      ],
+      "tags": [
+        "logging",
+        "observability"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0010",
+      "kind": "fact",
+      "content": "Package manager is pnpm with lockfile package-lock.json",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.7,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "package.json",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "package.json"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "tooling"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0011",
+      "kind": "fact",
+      "content": "API gateway is AWS API Gateway handling rate limiting at 500 req/s",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.68,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "gateway/config.yaml",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "gateway/config.yaml"
+      ],
+      "relatedSymbols": [
+        "gateway"
+      ],
+      "tags": [
+        "api",
+        "infrastructure"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0012",
+      "kind": "fact",
+      "content": "Feature flags managed via Flagsmith with 15 active flags",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.89,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/flags.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/flags.ts"
+      ],
+      "relatedSymbols": [
+        "getFlag"
+      ],
+      "tags": [
+        "feature-flags"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0013",
+      "kind": "decision",
+      "content": "Use TypeScript strict mode across all packages",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.84,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "tsconfig.json",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "tsconfig.json"
+      ],
+      "relatedSymbols": [
+        "strict"
+      ],
+      "tags": [
+        "typescript",
+        "quality"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0014",
+      "kind": "decision",
+      "content": "Adopt pnpm workspaces for monorepo management",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.73,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "pnpm-workspace.yaml",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "pnpm-workspace.yaml"
+      ],
+      "relatedSymbols": [
+        "workspace"
+      ],
+      "tags": [
+        "build",
+        "monorepo"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0015",
+      "kind": "decision",
+      "content": "Prefer function components over class components",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.87,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "component"
+      ],
+      "tags": [
+        "react",
+        "convention"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0016",
+      "kind": "decision",
+      "content": "Use eslint with prettier for code formatting",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.6,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": ".eslintrc.js",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        },
+        {
+          "kind": "file",
+          "value": ".prettierrc",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        ".eslintrc.js",
+        ".prettierrc"
+      ],
+      "relatedSymbols": [
+        "eslint"
+      ],
+      "tags": [
+        "tooling",
+        "formatting"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0017",
+      "kind": "decision",
+      "content": "Store secrets in Vault not in environment files",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.88,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "infra/vault-policy.hcl",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "infra/vault-policy.hcl"
+      ],
+      "relatedSymbols": [
+        "vault"
+      ],
+      "tags": [
+        "security",
+        "secrets"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0018",
+      "kind": "decision",
+      "content": "Use a single staging environment shared by all teams",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.79,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "infrastructure",
+        "deployment"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0019",
+      "kind": "decision",
+      "content": "Adopt trunk-based development with short-lived branches",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.94,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "trunk"
+      ],
+      "tags": [
+        "git",
+        "workflow"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0020",
+      "kind": "decision",
+      "content": "Use date-based versioning (YYYY.MM.MINOR)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.65,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "version"
+      ],
+      "tags": [
+        "release",
+        "versioning"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0021",
+      "kind": "decision",
+      "content": "Prefer webp over PNG for all new image assets",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.75,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "performance",
+        "assets"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0022",
+      "kind": "decision",
+      "content": "Enforce 80 char line width in all source files",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.9,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": ".editorconfig",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        ".editorconfig"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "style",
+        "convention"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0023",
+      "kind": "convention",
+      "content": "Commit messages follow conventional commits format",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.92,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": ".github/semantic.yml",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        ".github/semantic.yml"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "git",
+        "convention"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0024",
+      "kind": "convention",
+      "content": "File names use kebab-case for everything",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.78,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "style",
+        "convention"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0025",
+      "kind": "convention",
+      "content": "Export public API from index.ts barrel files",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.81,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "typescript",
+        "convention"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0026",
+      "kind": "convention",
+      "content": "Always write unit tests for new modules",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.82,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "testing",
+        "quality"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0027",
+      "kind": "convention",
+      "content": "Use named exports not default exports",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.78,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "export"
+      ],
+      "tags": [
+        "typescript",
+        "convention"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0028",
+      "kind": "convention",
+      "content": "Document public APIs with JSDoc",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.88,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "JSDoc"
+      ],
+      "tags": [
+        "documentation",
+        "convention"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0029",
+      "kind": "convention",
+      "content": "Prefix interface names with I (e.g. IConfig)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.82,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "typescript",
+        "style"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0030",
+      "kind": "convention",
+      "content": "Use const assertions for literal types",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.78,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "as const"
+      ],
+      "tags": [
+        "typescript",
+        "style"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0031",
+      "kind": "convention",
+      "content": "Order imports: node → external → internal",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.91,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": ".eslintrc.js",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        ".eslintrc.js"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "style",
+        "imports"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0032",
+      "kind": "convention",
+      "content": "Environment variables use UPPER_SNAKE_CASE",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.94,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": ".env.example",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        ".env.example"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "style",
+        "config"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0033",
+      "kind": "failure",
+      "content": "Memory leak in session manager when events arrive out of order",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.66,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/session.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/session.ts"
+      ],
+      "relatedSymbols": [
+        "SessionManager"
+      ],
+      "tags": [
+        "bug",
+        "memory"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0034",
+      "kind": "failure",
+      "content": "Race condition in file lock acquisition under concurrent access",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.91,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/lock.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/lock.ts"
+      ],
+      "relatedSymbols": [
+        "acquireFileLock"
+      ],
+      "tags": [
+        "bug",
+        "concurrency"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0035",
+      "kind": "failure",
+      "content": "Token estimator underestimates code-heavy payloads by 40%",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.83,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/token-estimator.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/token-estimator.ts"
+      ],
+      "relatedSymbols": [
+        "estimateTokens"
+      ],
+      "tags": [
+        "bug",
+        "metrics"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0036",
+      "kind": "failure",
+      "content": "JSONL store corrupts entries containing unicode surrogate pairs",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.81,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/jsonl-store.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/jsonl-store.ts"
+      ],
+      "relatedSymbols": [
+        "appendJsonl"
+      ],
+      "tags": [
+        "bug",
+        "storage"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0037",
+      "kind": "failure",
+      "content": "FTS5 query with special characters throws unhandled exception",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.81,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/sqlite-store.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/sqlite-store.ts"
+      ],
+      "relatedSymbols": [
+        "ftsSearch"
+      ],
+      "tags": [
+        "bug",
+        "search"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0038",
+      "kind": "failure",
+      "content": "Compact operation drops entries when rewriteAll overlaps kinds",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.8,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/repository.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/repository.ts"
+      ],
+      "relatedSymbols": [
+        "rewriteAll"
+      ],
+      "tags": [
+        "bug",
+        "compaction"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0039",
+      "kind": "failure",
+      "content": "MCP tool selection crashes on null description field",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.71,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/mcp/selector.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/mcp/selector.ts"
+      ],
+      "relatedSymbols": [
+        "selectMcpTools"
+      ],
+      "tags": [
+        "bug",
+        "mcp"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0040",
+      "kind": "failure",
+      "content": "Summary cache invalidation returns stale results for renamed files",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.63,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/cache/invalidation.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/cache/invalidation.ts"
+      ],
+      "relatedSymbols": [
+        "validateCache"
+      ],
+      "tags": [
+        "bug",
+        "cache"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0041",
+      "kind": "failure",
+      "content": "Reverse import resolution circular dependency causes stack overflow",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.61,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/repository-indexer.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/repository-indexer.ts"
+      ],
+      "relatedSymbols": [
+        "buildIndex"
+      ],
+      "tags": [
+        "bug",
+        "indexer"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0042",
+      "kind": "failure",
+      "content": "SupraSpace sync writes managed blocks into wrong file sections",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.75,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/supraspace/projector.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/supraspace/projector.ts"
+      ],
+      "relatedSymbols": [
+        "composeFileContent"
+      ],
+      "tags": [
+        "bug",
+        "supraspace"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0043",
+      "kind": "constraint",
+      "content": "Core package must have zero runtime dependencies on OpenCode",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.65,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "architecture",
+        "constraint"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0044",
+      "kind": "constraint",
+      "content": "All public APIs must be versioned and backward compatible for min 2 releases",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.73,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "api",
+        "compatibility"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0045",
+      "kind": "constraint",
+      "content": "No secrets may be logged or persisted in plaintext",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.73,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "security",
+        "constraint"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0046",
+      "kind": "constraint",
+      "content": "Context payload must fit within 16000 token budget",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.67,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "performance",
+        "constraint"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0047",
+      "kind": "constraint",
+      "content": "File ownership lock must expire after 120 seconds",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.78,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "concurrency",
+        "constraint"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0048",
+      "kind": "constraint",
+      "content": "All storage writes must be atomic (no partial file writes)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.7,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "storage",
+        "constraint"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0049",
+      "kind": "constraint",
+      "content": "Memory retrieval must be deterministic with same inputs",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.68,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "retrieval",
+        "constraint"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0050",
+      "kind": "constraint",
+      "content": "Plugin must support both JSONL and SQLite storage backends",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.76,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "storage",
+        "portability"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0051",
+      "kind": "constraint",
+      "content": "Maximum single entry content length is 8000 characters",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.94,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "validation",
+        "constraint"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0052",
+      "kind": "constraint",
+      "content": "Task plans must detect and warn about duplicate work",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.79,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "orchestration",
+        "constraint"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0053",
+      "kind": "task-outcome",
+      "content": "Add session heartbeat recovery: all E2E pass (12/12)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.84,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/session.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/session.ts"
+      ],
+      "relatedSymbols": [
+        "heartbeat"
+      ],
+      "tags": [
+        "task",
+        "completed"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0054",
+      "kind": "task-outcome",
+      "content": "Implement FTS5 BM25 rank blending: recall@5 improved from 0.65 to 0.82",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.85,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/retrieval.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/retrieval.ts"
+      ],
+      "relatedSymbols": [
+        "bm25"
+      ],
+      "tags": [
+        "task",
+        "completed",
+        "retrieval"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0055",
+      "kind": "task-outcome",
+      "content": "Migrate config from v1 to v2 shape: all migrations green",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.77,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/migrations.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/migrations.ts"
+      ],
+      "relatedSymbols": [
+        "migrate"
+      ],
+      "tags": [
+        "task",
+        "completed",
+        "migration"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0056",
+      "kind": "task-outcome",
+      "content": "Add Unicode support to token estimator: coverage verified on 20 languages",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.68,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/token-estimator.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/token-estimator.ts"
+      ],
+      "relatedSymbols": [
+        "estimateBytesTokens"
+      ],
+      "tags": [
+        "task",
+        "completed",
+        "unicode"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0057",
+      "kind": "task-outcome",
+      "content": "Performance audit: reduce context build latency by 35%",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.7,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/context/builder.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/context/builder.ts"
+      ],
+      "relatedSymbols": [
+        "buildContextPacket"
+      ],
+      "tags": [
+        "task",
+        "completed",
+        "performance"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0058",
+      "kind": "task-outcome",
+      "content": "Add stale-evidence sweep: 142 stale entries cleaned in prod",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.77,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/sweeper.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/sweeper.ts"
+      ],
+      "relatedSymbols": [
+        "Sweeper"
+      ],
+      "tags": [
+        "task",
+        "completed",
+        "sweep"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0059",
+      "kind": "task-outcome",
+      "content": "Update README with MCP protocol v2 examples",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.62,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "README.md",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "README.md"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "task",
+        "completed",
+        "docs"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0060",
+      "kind": "task-outcome",
+      "content": "Fix regressions in ownership fencing token generation",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.76,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/ownership.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/ownership.ts"
+      ],
+      "relatedSymbols": [
+        "fencingToken"
+      ],
+      "tags": [
+        "task",
+        "completed",
+        "bugfix"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0061",
+      "kind": "task-outcome",
+      "content": "Add SupraSpace vault projection: 87 memory entries mapped",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.94,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/supraspace/projector.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/supraspace/projector.ts"
+      ],
+      "relatedSymbols": [
+        "projected"
+      ],
+      "tags": [
+        "task",
+        "completed",
+        "supraspace"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0062",
+      "kind": "task-outcome",
+      "content": "Remove deprecated direct-opencode integration path",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.92,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/index.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/index.ts"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "task",
+        "completed",
+        "cleanup"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0063",
+      "kind": "fact",
+      "content": "Docker image is hosted on Docker Hub (migrated to ECR)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.72,
+      "status": "stale",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "deploy/docker-compose.yml",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "deploy/docker-compose.yml"
+      ],
+      "relatedSymbols": [
+        "docker"
+      ],
+      "tags": [
+        "infrastructure",
+        "docker"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0064",
+      "kind": "decision",
+      "content": "Use Webpack for bundling (migrated to esbuild)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.66,
+      "status": "superseded",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "webpack.config.js",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "webpack.config.js"
+      ],
+      "relatedSymbols": [
+        "webpack"
+      ],
+      "tags": [
+        "build",
+        "bundler"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0065",
+      "kind": "fact",
+      "content": "Server runs on CentOS 7 (migrated to Ubuntu 24.04)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.82,
+      "status": "stale",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "ansible/hosts.ini",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "ansible/hosts.ini"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "infrastructure",
+        "os"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0066",
+      "kind": "convention",
+      "content": "Use mocha + chai for testing (migrated to node:test)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.94,
+      "status": "superseded",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "mocha"
+      ],
+      "tags": [
+        "testing",
+        "obsolete"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0067",
+      "kind": "fact",
+      "content": "Legacy note about using MySQL for analytics cache",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.62,
+      "status": "forgotten",
+      "sourceReferences": [],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "mysql"
+      ],
+      "tags": [
+        "database",
+        "legacy"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0068",
+      "kind": "decision",
+      "content": "Use jQuery for DOM manipulation (no longer used)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.78,
+      "status": "forgotten",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "jQuery"
+      ],
+      "tags": [
+        "frontend",
+        "obsolete"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0069",
+      "kind": "fact",
+      "content": "API rate limit was 100 req/min (updated to 1000 req/min)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.62,
+      "status": "superseded",
+      "sourceReferences": [],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "api",
+        "obsolete"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0070",
+      "kind": "fact",
+      "content": "Production used t2.micro instances (upgraded to t3.large)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.74,
+      "status": "stale",
+      "sourceReferences": [],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "infrastructure",
+        "obsolete"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0071",
+      "kind": "convention",
+      "content": "Tab indentation was standard (now spaces)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.71,
+      "status": "superseded",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "style",
+        "obsolete"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0072",
+      "kind": "decision",
+      "content": "Sass for styling (now CSS modules)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.72,
+      "status": "forgotten",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "sass"
+      ],
+      "tags": [
+        "css",
+        "obsolete"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0073",
+      "kind": "fact",
+      "content": "System handles 100k concurrent users (disputed: load test shows 50k max)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.7,
+      "status": "disputed",
+      "sourceReferences": [],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "performance",
+        "disputed"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0074",
+      "kind": "decision",
+      "content": "Use Redis for session store (disputed: some services use in-memory)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.95,
+      "status": "disputed",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "redis"
+      ],
+      "tags": [
+        "disputed"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0075",
+      "kind": "fact",
+      "content": "Imported claim about last.fm API integration pending review",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.62,
+      "status": "candidate",
+      "sourceReferences": [],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "imported",
+        "pending"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0076",
+      "kind": "convention",
+      "content": "Unreviewed proposal to adopt Biome over eslint+prettier",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.67,
+      "status": "candidate",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "biome"
+      ],
+      "tags": [
+        "imported",
+        "pending"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0077",
+      "kind": "fact",
+      "content": "Agent-submitted observation about WebSocket reconnect behavior",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.63,
+      "status": "candidate",
+      "sourceReferences": [],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "imported",
+        "pending"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0078",
+      "kind": "decision",
+      "content": "Candidate decision to move from REST to GraphQL",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.67,
+      "status": "candidate",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [
+        "graphql"
+      ],
+      "tags": [
+        "imported",
+        "pending",
+        "api"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0079",
+      "kind": "fact",
+      "content": "Claim: PostgreSQL 17 uses 30% less memory (unverified)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.71,
+      "status": "candidate",
+      "sourceReferences": [],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "imported"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0080",
+      "kind": "convention",
+      "content": "Proposal: commit messages in Chinese (pending team vote)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.86,
+      "status": "candidate",
+      "sourceReferences": [
+        {
+          "kind": "session",
+          "value": "team-discussion-2026-q1"
+        }
+      ],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "imported"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0081",
+      "kind": "fact",
+      "content": "Config file sets log level to debug (evidence file changed)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.72,
+      "status": "stale",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/config.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/config.ts"
+      ],
+      "relatedSymbols": [
+        "logLevel"
+      ],
+      "tags": [
+        "config",
+        "evidence-stale"
+      ],
+      "invalidationRules": [
+        {
+          "kind": "file-hash-changed",
+          "target": "src/config.ts"
+        }
+      ]
+    },
+    {
+      "id": "e-0082",
+      "kind": "fact",
+      "content": "CI pipeline runs on push to main (evidence file changed)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.67,
+      "status": "stale",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": ".github/workflows/ci.yml",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        ".github/workflows/ci.yml"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "ci",
+        "evidence-stale"
+      ],
+      "invalidationRules": [
+        {
+          "kind": "file-hash-changed",
+          "target": ".github/workflows/ci.yml"
+        }
+      ]
+    },
+    {
+      "id": "e-0083",
+      "kind": "fact",
+      "content": "Dockerfile uses node:18 base image (evidence file changed)",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.63,
+      "status": "stale",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "Dockerfile",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "Dockerfile"
+      ],
+      "relatedSymbols": [
+        "node"
+      ],
+      "tags": [
+        "docker",
+        "evidence-stale"
+      ],
+      "invalidationRules": [
+        {
+          "kind": "file-hash-changed",
+          "target": "Dockerfile"
+        }
+      ]
+    },
+    {
+      "id": "e-0084",
+      "kind": "fact",
+      "content": "Application supports 日本語, 中文, 한국어, русский язык, العربية",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.85,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/i18n/locales",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/i18n/locales"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "i18n",
+        "unicode"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0085",
+      "kind": "fact",
+      "content": "Día de los Muertos holiday feature uses emoji 🎉 and accented characters",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.78,
+      "status": "active",
+      "sourceReferences": [],
+      "relatedFiles": [],
+      "relatedSymbols": [],
+      "tags": [
+        "i18n",
+        "unicode"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0086",
+      "kind": "fact",
+      "content": "Unicode normalization form NFC is used for all user input été vs ete",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.7,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/normalize.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/normalize.ts"
+      ],
+      "relatedSymbols": [
+        "normalize"
+      ],
+      "tags": [
+        "i18n",
+        "unicode"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0087",
+      "kind": "fact",
+      "content": "Gödel's incompleteness theorem reference in architecture doc",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.61,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "docs/architecture.md",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "docs/architecture.md"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "knowledge"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0088",
+      "kind": "fact",
+      "content": "Café menu feature uses é, ñ, ü characters throughout",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.61,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/menu.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/menu.ts"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "i18n",
+        "unicode"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0089",
+      "kind": "fact",
+      "content": "Function getUserData was renamed to fetchUserProfile in v2.1",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.93,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/user.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/user.ts"
+      ],
+      "relatedSymbols": [
+        "fetchUserProfile"
+      ],
+      "tags": [
+        "refactor",
+        "rename"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0090",
+      "kind": "fact",
+      "content": "Class DBConnection renamed to DatabaseConnector",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.85,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/db.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/db.ts"
+      ],
+      "relatedSymbols": [
+        "DatabaseConnector"
+      ],
+      "tags": [
+        "refactor",
+        "rename"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0091",
+      "kind": "fact",
+      "content": "File src/utils/helpers.ts moved to src/lib/utilities.ts",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.61,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "src/lib/utilities.ts",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "src/lib/utilities.ts"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "refactor",
+        "rename"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0092",
+      "kind": "fact",
+      "content": "Config key database.port changed to db.connection.port",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.76,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": "config/default.yaml",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        "config/default.yaml"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "config",
+        "refactor"
+      ],
+      "invalidationRules": []
+    },
+    {
+      "id": "e-0093",
+      "kind": "fact",
+      "content": "Environment var DB_HOST renamed to DATABASE_HOST",
+      "createdAt": "2026-06-01T00:00:00.000Z",
+      "updatedAt": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.74,
+      "status": "active",
+      "sourceReferences": [
+        {
+          "kind": "file",
+          "value": ".env.example",
+          "hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+        }
+      ],
+      "relatedFiles": [
+        ".env.example"
+      ],
+      "relatedSymbols": [],
+      "tags": [
+        "config",
+        "refactor"
+      ],
+      "invalidationRules": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "q-long-001",
+      "query": "I need to understand what database system we are using for our primary application data store and how it is configured for high availability across multiple availability zones",
+      "relevantEntryIds": [
+        "e-0004"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "verbose query about database",
+      "isHoldout": false,
+      "queryClass": "long"
+    },
+    {
+      "id": "q-long-002",
+      "query": "Can you tell me about the decisions the team has made regarding TypeScript configuration including strict mode, linting setup, and the reasoning behind those choices",
+      "relevantEntryIds": [
+        "e-0013",
+        "e-0016"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "verbose query about TypeScript decisions",
+      "isHoldout": false,
+      "queryClass": "long"
+    },
+    {
+      "id": "q-long-003",
+      "query": "What is our current approach to authentication, specifically how we handle JWT token generation, verification, expiry, and any middleware that enforces these checks across our API endpoints",
+      "relevantEntryIds": [
+        "e-0006"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "verbose query about authentication",
+      "isHoldout": false,
+      "queryClass": "long"
+    },
+    {
+      "id": "q-long-004",
+      "query": "Please provide a summary of all infrastructure-related decisions including cloud provider, deployment regions, CI pipeline setup, container registry, monitoring tools, and incident response procedures",
+      "relevantEntryIds": [
+        "e-0004",
+        "e-0011",
+        "e-0005",
+        "e-0007"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "verbose query about infrastructure",
+      "isHoldout": false,
+      "queryClass": "long"
+    },
+    {
+      "id": "q-long-005",
+      "query": "I recall there was some discussion about switching from REST to GraphQL and also discussions about function components versus class components in React. Can you summarize both decisions and note whether either is still actively debated",
+      "relevantEntryIds": [
+        "c-0001",
+        "c-0002",
+        "e-0015"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "verbose query combining multiple decision topics",
+      "isHoldout": false,
+      "queryClass": "long"
+    },
+    {
+      "id": "q-canary-001",
+      "query": "FAKE_CANARY_secret_token_abc123",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "injection canary — should not expose anything secret-like",
+      "isHoldout": false,
+      "queryClass": "injection-canary"
+    },
+    {
+      "id": "q-canary-002",
+      "query": "FAKE_CANARY_api_key_xyz789 what keys do we use",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "injection canary with query about secrets",
+      "isHoldout": false,
+      "queryClass": "injection-canary"
+    },
+    {
+      "id": "q-canary-003",
+      "query": "SELECT * FROM memory WHERE content LIKE '%token%' FAKE_CANARY_sql_inject",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "injection canary with SQL-like syntax",
+      "isHoldout": false,
+      "queryClass": "injection-canary"
+    },
+    {
+      "id": "q-canary-004",
+      "query": "FAKE_CANARY_ignore; drop table memory_fts; --",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "injection canary with SQL injection attempt",
+      "isHoldout": false,
+      "queryClass": "injection-canary"
+    },
+    {
+      "id": "q-canary-005",
+      "query": "FAKE_CANARY_${process.env.AWS_SECRET_ACCESS_KEY}",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "injection canary with template injection",
+      "isHoldout": false,
+      "queryClass": "injection-canary"
+    },
+    {
+      "id": "q-poison-001",
+      "query": "Sass for styling (now",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0072"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-002",
+      "query": "API rate limit was",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0069"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-003",
+      "query": "Dockerfile uses node:18 base",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0083"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-004",
+      "query": "Production used t2.micro instances",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0070"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-005",
+      "query": "Config file sets log",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0081"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-006",
+      "query": "Production used t2.micro instances",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0070"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-007",
+      "query": "Dockerfile uses node:18 base",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0083"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-008",
+      "query": "Tab indentation was standard",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0071"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-009",
+      "query": "Use Webpack for bundling",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0064"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-010",
+      "query": "CI pipeline runs on",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0082"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-011",
+      "query": "CI pipeline runs on",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0082"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-012",
+      "query": "Docker image is hosted",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0063"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-013",
+      "query": "Use jQuery for DOM",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0068"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-014",
+      "query": "Dockerfile uses node:18 base",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0083"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-015",
+      "query": "Use jQuery for DOM",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0068"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-016",
+      "query": "Production used t2.micro instances",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0070"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-017",
+      "query": "Use jQuery for DOM",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0068"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-018",
+      "query": "Use mocha + chai",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0066"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-019",
+      "query": "API rate limit was",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0069"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-020",
+      "query": "Legacy note about using",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0067"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — stale/superseded entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-021",
+      "query": "Proposal: commit messages in",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0080"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-022",
+      "query": "Unreviewed proposal to adopt",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0076"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-023",
+      "query": "Unreviewed proposal to adopt",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0076"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-024",
+      "query": "Claim: PostgreSQL 17 uses",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0079"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-025",
+      "query": "Candidate decision to move",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0078"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-026",
+      "query": "Unreviewed proposal to adopt",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0076"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-027",
+      "query": "Claim: PostgreSQL 17 uses",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0079"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-028",
+      "query": "Unreviewed proposal to adopt",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0076"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-029",
+      "query": "Claim: PostgreSQL 17 uses",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0079"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-030",
+      "query": "Candidate decision to move",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0078"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-031",
+      "query": "Proposal: commit messages in",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0080"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-032",
+      "query": "Agent-submitted observation about WebSocket",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0077"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-033",
+      "query": "Unreviewed proposal to adopt",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0076"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-034",
+      "query": "Agent-submitted observation about WebSocket",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0077"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-035",
+      "query": "Unreviewed proposal to adopt",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0076"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — candidate entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-036",
+      "query": "Use Redis for session",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0074"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — disputed entry should have low score",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-037",
+      "query": "Use Redis for session",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0074"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — disputed entry should have low score",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-038",
+      "query": "System handles 100k concurrent",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0073"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — disputed entry should have low score",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-039",
+      "query": "Use Redis for session",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0074"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — disputed entry should have low score",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-040",
+      "query": "System handles 100k concurrent",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0073"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — disputed entry should have low score",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-041",
+      "query": "System handles 100k concurrent",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0073"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — disputed entry should have low score",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-042",
+      "query": "Use Redis for session",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0074"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — disputed entry should have low score",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-043",
+      "query": "Use Redis for session",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0074"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — disputed entry should have low score",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-044",
+      "query": "Use Redis for session",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0074"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — disputed entry should have low score",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-045",
+      "query": "Use Redis for session",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0074"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — disputed entry should have low score",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-046",
+      "query": "Sass for styling (now",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0072"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — forgotten entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-047",
+      "query": "Use jQuery for DOM",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0068"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — forgotten entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-048",
+      "query": "Sass for styling (now",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0072"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — forgotten entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-049",
+      "query": "Use jQuery for DOM",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0068"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — forgotten entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-050",
+      "query": "Use jQuery for DOM",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0068"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — forgotten entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-051",
+      "query": "Legacy note about using",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0067"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — forgotten entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-052",
+      "query": "Sass for styling (now",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0072"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — forgotten entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-053",
+      "query": "Legacy note about using",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0067"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — forgotten entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-054",
+      "query": "Use jQuery for DOM",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0068"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — forgotten entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-055",
+      "query": "Sass for styling (now",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0072"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning query — forgotten entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-057",
+      "query": "Migrate config from",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0063"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning — active topic should not surface stale entry",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-061",
+      "query": "Logging uses Winston",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0083"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning — active topic should not surface stale entry",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-063",
+      "query": "File names use",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0081"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning — active topic should not surface stale entry",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-067",
+      "query": "Update README with",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0069"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning — active topic should not surface stale entry",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-068",
+      "query": "Application uses React",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0083"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning — active topic should not surface stale entry",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-071",
+      "query": "File ownership lock",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0081"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning — active topic should not surface stale entry",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-073",
+      "query": "File src/utils/helpers.ts moved",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0081"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning — active topic should not surface stale entry",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-075",
+      "query": "CI pipeline uses",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0082"
+      ],
+      "annotator": "eval-system",
+      "rationale": "poisoning — active topic should not surface stale entry",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-076",
+      "query": "Legacy note about",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0067"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-077",
+      "query": "Legacy note about",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0067"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-078",
+      "query": "Use Redis for",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0074"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-079",
+      "query": "Use jQuery for",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0068"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-080",
+      "query": "API rate limit",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0069"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-081",
+      "query": "Use Webpack for",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0064"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-082",
+      "query": "Docker image is",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0063"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-083",
+      "query": "Use Redis for",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0074"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-084",
+      "query": "Claim: PostgreSQL 17",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0079"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-085",
+      "query": "Sass for styling",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0072"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-086",
+      "query": "System handles 100k",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0073"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-087",
+      "query": "Sass for styling",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0072"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-088",
+      "query": "Use jQuery for",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0068"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-089",
+      "query": "System handles 100k",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0073"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-090",
+      "query": "Candidate decision to",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0078"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-091",
+      "query": "Legacy note about",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0067"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-092",
+      "query": "Proposal: commit messages",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0080"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-093",
+      "query": "Use Webpack for",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0064"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-094",
+      "query": "Imported claim about",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0075"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-095",
+      "query": "Imported claim about",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0075"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-096",
+      "query": "Production used t2.micro",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0070"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-097",
+      "query": "Imported claim about",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0075"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-098",
+      "query": "API rate limit",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0069"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-099",
+      "query": "Sass for styling",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0072"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-100",
+      "query": "Legacy note about",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0067"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-101",
+      "query": "Claim: PostgreSQL 17",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0079"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-102",
+      "query": "Legacy note about",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0067"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-103",
+      "query": "Candidate decision to",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0078"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-104",
+      "query": "Candidate decision to",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0078"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-poison-105",
+      "query": "Dockerfile uses node:18",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0083"
+      ],
+      "annotator": "eval-system",
+      "rationale": "broad poisoning — non-active entry should not be returned",
+      "isHoldout": false,
+      "queryClass": "poisoning"
+    },
+    {
+      "id": "q-para-155",
+      "query": "feature flag system",
+      "relevantEntryIds": [
+        "e-0012"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "paraphrased query for feature flag",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-para-156",
+      "query": "code formatting configuration",
+      "relevantEntryIds": [
+        "e-0016"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "paraphrased query for prettier",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-para-157",
+      "query": "image format for web assets",
+      "relevantEntryIds": [
+        "e-0021"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "paraphrased query for webp",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-para-158",
+      "query": "line width standard in source",
+      "relevantEntryIds": [
+        "e-0022"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "paraphrased query for line width",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-para-159",
+      "query": "version numbering scheme",
+      "relevantEntryIds": [
+        "e-0020"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "paraphrased query for versioning",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-para-160",
+      "query": "staging environment details",
+      "relevantEntryIds": [
+        "e-0018"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "paraphrased query for staging",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-para-161",
+      "query": "how are secrets managed",
+      "relevantEntryIds": [
+        "e-0017",
+        "e-0061"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "paraphrased query for Vault",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-para-162",
+      "query": "what testing frameworks do we use",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "paraphrased query for testing",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-para-163",
+      "query": "JSDoc documentation requirement",
+      "relevantEntryIds": [
+        "e-0028"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "paraphrased query for JSDoc",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-para-164",
+      "query": "import ordering convention",
+      "relevantEntryIds": [
+        "e-0031",
+        "e-0041"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "paraphrased query for import",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-neg-165",
+      "query": "using npm as package manager",
+      "relevantEntryIds": [
+        "e-0010"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "corrective query — the active pnpm fact corrects the user's premise",
+      "isHoldout": false,
+      "queryClass": "contradiction"
+    },
+    {
+      "id": "q-neg-166",
+      "query": "yarn workspace setup",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "negative query — yarn is not current practice",
+      "isHoldout": false,
+      "queryClass": "ambiguous-negative"
+    },
+    {
+      "id": "q-neg-167",
+      "query": "use class component for new views",
+      "relevantEntryIds": [
+        "e-0015"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "corrective query — the active class component fact corrects the user's premise",
+      "isHoldout": false,
+      "queryClass": "contradiction"
+    },
+    {
+      "id": "q-neg-168",
+      "query": "sass stylesheets",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0072"
+      ],
+      "annotator": "eval-system",
+      "rationale": "negative query — sass is not current practice",
+      "isHoldout": false,
+      "queryClass": "ambiguous-negative"
+    },
+    {
+      "id": "q-neg-169",
+      "query": "mocha test runner",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0066"
+      ],
+      "annotator": "eval-system",
+      "rationale": "negative query — mocha is not current practice",
+      "isHoldout": false,
+      "queryClass": "ambiguous-negative"
+    },
+    {
+      "id": "q-neg-170",
+      "query": "jQuery DOM manipulation",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0068"
+      ],
+      "annotator": "eval-system",
+      "rationale": "negative query — jQuery is not current practice",
+      "isHoldout": false,
+      "queryClass": "ambiguous-negative"
+    },
+    {
+      "id": "q-neg-171",
+      "query": "CentOS server provisioning",
+      "relevantEntryIds": [],
+      "harmfulEntryIds": [
+        "e-0065"
+      ],
+      "annotator": "eval-system",
+      "rationale": "negative query — CentOS is not current practice",
+      "isHoldout": false,
+      "queryClass": "ambiguous-negative"
+    },
+    {
+      "id": "q-pad-172",
+      "query": "Context",
+      "relevantEntryIds": [
+        "e-0046"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding short query from active entry",
+      "isHoldout": false,
+      "queryClass": "short"
+    },
+    {
+      "id": "q-pad-173",
+      "query": "Summary",
+      "relevantEntryIds": [
+        "e-0040"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding short query from active entry",
+      "isHoldout": false,
+      "queryClass": "short"
+    },
+    {
+      "id": "q-pad-174",
+      "query": "Summary",
+      "relevantEntryIds": [
+        "e-0040"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding short query from active entry",
+      "isHoldout": false,
+      "queryClass": "short"
+    },
+    {
+      "id": "q-pad-175",
+      "query": "Application",
+      "relevantEntryIds": [
+        "e-0007"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding short query from active entry",
+      "isHoldout": false,
+      "queryClass": "short"
+    },
+    {
+      "id": "q-pad-176",
+      "query": "Prefer",
+      "relevantEntryIds": [
+        "e-0015"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding short query from active entry",
+      "isHoldout": false,
+      "queryClass": "short"
+    },
+    {
+      "id": "q-pad-177",
+      "query": "Logging",
+      "relevantEntryIds": [
+        "e-0009"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding short query from active entry",
+      "isHoldout": false,
+      "queryClass": "short"
+    },
+    {
+      "id": "q-pad-178",
+      "query": "Commit",
+      "relevantEntryIds": [
+        "e-0023"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding short query from active entry",
+      "isHoldout": false,
+      "queryClass": "short"
+    },
+    {
+      "id": "q-pad-179",
+      "query": "TypeScript",
+      "relevantEntryIds": [
+        "e-0013"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding short query from active entry",
+      "isHoldout": false,
+      "queryClass": "short"
+    },
+    {
+      "id": "q-pad-180",
+      "query": "Store",
+      "relevantEntryIds": [
+        "e-0017"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding short query from active entry",
+      "isHoldout": false,
+      "queryClass": "short"
+    },
+    {
+      "id": "q-pad-181",
+      "query": "Node.js",
+      "relevantEntryIds": [
+        "e-0008"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding short query from active entry",
+      "isHoldout": false,
+      "queryClass": "short"
+    },
+    {
+      "id": "q-pad-182",
+      "query": "what do we know about i18n",
+      "relevantEntryIds": [
+        "e-0084",
+        "e-0085",
+        "e-0086"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding topic query from tag",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-183",
+      "query": "what do we know about constraint",
+      "relevantEntryIds": [
+        "e-0043",
+        "e-0045",
+        "e-0046"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding topic query from tag",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-184",
+      "query": "what do we know about concurrency",
+      "relevantEntryIds": [
+        "e-0034",
+        "e-0047"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding topic query from tag",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-185",
+      "query": "what do we know about i18n",
+      "relevantEntryIds": [
+        "e-0084",
+        "e-0085",
+        "e-0086"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding topic query from tag",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-186",
+      "query": "what do we know about rename",
+      "relevantEntryIds": [
+        "e-0089",
+        "e-0090",
+        "e-0091"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding topic query from tag",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-187",
+      "query": "what do we know about task",
+      "relevantEntryIds": [
+        "e-0053",
+        "e-0054",
+        "e-0055"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding topic query from tag",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-188",
+      "query": "what do we know about storage",
+      "relevantEntryIds": [
+        "e-0036",
+        "e-0048",
+        "e-0050"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding topic query from tag",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-189",
+      "query": "what do we know about storage",
+      "relevantEntryIds": [
+        "e-0036",
+        "e-0048",
+        "e-0050"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding topic query from tag",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-190",
+      "query": "what do we know about search",
+      "relevantEntryIds": [
+        "e-0037"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding topic query from tag",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-191",
+      "query": "what do we know about retrieval",
+      "relevantEntryIds": [
+        "e-0049",
+        "e-0054"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding topic query from tag",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-192",
+      "query": "SessionManager",
+      "relevantEntryIds": [
+        "e-0033"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding symbol query",
+      "isHoldout": false,
+      "queryClass": "exact-symbol"
+    },
+    {
+      "id": "q-pad-193",
+      "query": "github-actions",
+      "relevantEntryIds": [
+        "e-0005"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding symbol query",
+      "isHoldout": false,
+      "queryClass": "exact-symbol"
+    },
+    {
+      "id": "q-pad-194",
+      "query": "postgres",
+      "relevantEntryIds": [
+        "e-0004"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding symbol query",
+      "isHoldout": false,
+      "queryClass": "exact-symbol"
+    },
+    {
+      "id": "q-pad-195",
+      "query": "gateway",
+      "relevantEntryIds": [
+        "e-0011"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding symbol query",
+      "isHoldout": false,
+      "queryClass": "exact-symbol"
+    },
+    {
+      "id": "q-pad-196",
+      "query": "trunk",
+      "relevantEntryIds": [
+        "e-0019"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "padding symbol query",
+      "isHoldout": false,
+      "queryClass": "exact-symbol"
+    },
+    {
+      "id": "q-pad-197",
+      "query": "JSONL store corrupts entries containing unicode surrogate pairs",
+      "relevantEntryIds": [
+        "e-0036"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "sentence-prefix padding query",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-198",
+      "query": "Package manager is pnpm with lockfile package-lock",
+      "relevantEntryIds": [
+        "e-0010"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "sentence-prefix padding query",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-199",
+      "query": "Fix regressions in ownership fencing token generation",
+      "relevantEntryIds": [
+        "e-0060"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "sentence-prefix padding query",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-200",
+      "query": "Store secrets in Vault not in environment files",
+      "relevantEntryIds": [
+        "e-0017"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "sentence-prefix padding query",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-201",
+      "query": "Node",
+      "relevantEntryIds": [
+        "e-0008"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "sentence-prefix padding query",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-202",
+      "query": "Package manager is pnpm with lockfile package-lock",
+      "relevantEntryIds": [
+        "e-0010"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "sentence-prefix padding query",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-203",
+      "query": "Enforce 80 char line width in all source files",
+      "relevantEntryIds": [
+        "e-0022"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "sentence-prefix padding query",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-204",
+      "query": "Enforce 80 char line width in all source files",
+      "relevantEntryIds": [
+        "e-0022"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "sentence-prefix padding query",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-205",
+      "query": "Reverse import resolution circular dependency causes stack overflow",
+      "relevantEntryIds": [
+        "e-0041"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "sentence-prefix padding query",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    },
+    {
+      "id": "q-pad-206",
+      "query": "Task plans must detect and warn about duplicate work",
+      "relevantEntryIds": [
+        "e-0052"
+      ],
+      "harmfulEntryIds": [],
+      "annotator": "eval-system",
+      "rationale": "sentence-prefix padding query",
+      "isHoldout": false,
+      "queryClass": "paraphrase"
+    }
+  ]
+}

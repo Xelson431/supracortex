@@ -1,0 +1,25 @@
+{
+  "name": "@local/supracortex-pi",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pi CLI integration for SupraCortex. Launcher, bundled extension, and SDK child-session supervisor. Pinned to a tested Pi release.",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts",
+    "./launch": "./src/launch.ts",
+    "./extension": "./src/extension.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p ../../tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@local/supracortex-core": "workspace:*",
+    "@earendil-works/pi-coding-agent": "0.87.1",
+    "@earendil-works/pi-tui": "0.87.1",
+    "jsonc-parser": "3.3.1",
+    "typebox": "1.3.27",
+    "yaml": "2.9.1",
+    "zod": "3.25.76"
+  }
+}

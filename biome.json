@@ -1,0 +1,53 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "files": {
+    "ignore": [
+      "node_modules",
+      "dist",
+      "coverage",
+      ".supracortex",
+      "tests/fixtures/**",
+      "**/*.log"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noAssignInExpressions": "warn",
+        "noControlCharactersInRegex": "warn"
+      },
+      "style": {
+        "useNodejsImportProtocol": "error",
+        "noNonNullAssertion": "warn",
+        "useTemplate": "warn",
+        "noUnusedTemplateLiteral": "warn",
+        "noParameterAssign": "warn",
+        "useImportType": "warn",
+        "useConst": "warn"
+      },
+      "complexity": {
+        "useOptionalChain": "warn",
+        "useLiteralKeys": "warn",
+        "noForEach": "warn"
+      },
+      "performance": {
+        "noDelete": "warn"
+      },
+      "correctness": {
+        "noUnnecessaryContinue": "warn"
+      }
+    }
+  }
+}

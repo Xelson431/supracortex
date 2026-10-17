@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# supracortex-mcp: stable stdio MCP entry for any MCP host (Codex, Claude Code,
+# Cursor, Gemini, DeepSeek-based harnesses, ...). Host configs point here, not
+# at a repo path, so moving/reinstalling the checkout never breaks them.
+# Project root = SUPRACORTEX_ROOT if set, else the host's working directory.
+set -euo pipefail
+SC_LAUNCHER="${BASH_SOURCE[0]}"
+_t="$SC_LAUNCHER"; while [ -L "$_t" ]; do _l="$(readlink "$_t")"; case "$_l" in /*) _t="$_l";; *) _t="$(dirname "$_t")/$_l";; esac; done
+. "$(cd "$(dirname "$_t")" && pwd -P)/launcher-common.sh"
+sc_require_node supracortex-mcp
+sc_require_build supracortex-mcp
+exec node "$SUPRACODE_ROOT/dist/cli.js" mcp "$@"

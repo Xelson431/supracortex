@@ -1,0 +1,36 @@
+# Root workspace ignores. The project runtime directory (.supracortex)
+# is managed per consuming-project, not here.
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+
+# Local test scratch
+tests/**/.tmp/
+tests/**/*.tmp/
+
+# Local deepwork session state
+.slim/deepwork/
+
+# Pi CLI benchmark reports (generated)
+benchmarks/pi-cli/report-*.json
+
+# Local tool state accidentally created in the checkout (may hold credentials)
+.config/
+
+# Local agent/editor state (never committed)
+.claude/
+
+# Local SLIM state and SupraCortex backups
+.slim/
+*.supracortex-backup-*
+
+# Local Supabase CLI project state (not part of this package)
+supabase/.temp/
+
+# Local agent and runtime state (never commit)
+.codex/
+.opencode/
+.supracortex/
+.mcp.json
+.ignore

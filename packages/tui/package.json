@@ -1,0 +1,19 @@
+{
+  "name": "@local/supracode-tui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "SupraCode brand TUI plugin for OpenCode (SUPRACODE home logo + status footer).",
+  "type": "module",
+  "exports": {
+    "./tui": "./dist/tui.js",
+    "./v2": "./dist/tui-v2.js"
+  },
+  "scripts": {
+    "typecheck": "tsc -p ../../tsconfig.json --noEmit"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": "1.18.32",
+    "@opentui/core": "0.5.12",
+    "@opentui/solid": "0.5.12"
+  }
+}

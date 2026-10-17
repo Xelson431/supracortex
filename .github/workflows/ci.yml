@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  # ── Lint gate: Biome (lint-only; formatter diff not yet enforced) ──
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+
+  # ── Baseline: typecheck, unit, integration, acceptance, compatibility ──
+  test:
+    name: ${{ matrix.os }} / baseline
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+
+  # ── Mandatory tarball E2E gate: build → pack → clean-room install ──
+  e2e-tarball:
+    name: ${{ matrix.os }} / tarball E2E
+    needs: [test]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Build release artifact (bundles and declarations)
+        run: pnpm build
+      - name: Pack tarball
+        # The exact artifact is built above. Avoid lifecycle re-entry here.
+        run: npm pack --ignore-scripts
+      - name: Clean-tarball E2E (mandatory gate)
+        env:
+          SUPRACORTEX_E2E: "1"
+        run: node --test "tests/acceptance/e2e-tarball.test.ts"
+
+  # ── Retrieval evaluation and deterministic benchmarks ──
+  evaluation:
+    name: evaluation + benchmarks
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Deterministic benchmark suite
+        run: node benchmarks/run.ts
+      - name: Retrieval evaluation (deterministic)
+        run: node benchmarks/eval.ts --retriever deterministic --corpus 1.0.1
+      - name: Retrieval evaluation (FTS5 sidecar)
+        run: node benchmarks/eval.ts --retriever fts5 --corpus 1.0.1
+      - name: Lifecycle workflow evaluation
+        run: node --test tests/evaluation/workflow.test.ts
+
+  # ── Fault injection, adversarial security, property/fuzz, bounded soak ──
+  fault-security-soak:
+    name: fault / security / soak
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Property-based / fuzz (bounded soak scaffold)
+        run: node --test "tests/unit/property.test.ts"
+      - name: Adversarial security tests
+        run: node --test "tests/integration/adversarial.test.ts"
+      - name: Security hardening tests
+        run: node --test "tests/integration/security-hardening.test.ts"

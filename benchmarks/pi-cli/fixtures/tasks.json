@@ -1,0 +1,39 @@
+{
+  "tasks": [
+    {
+      "id": "simple",
+      "kind": "simple",
+      "brief": "In calc.mjs the add(a, b) function subtracts instead of adding. Fix it so add(2, 3) returns 5.",
+      "check": ["node", "--input-type=module", "-e", "import('./calc.mjs').then(m => { if (m.add(2, 3) !== 5) process.exit(1); })"],
+      "warm": false
+    },
+    {
+      "id": "medium",
+      "kind": "medium",
+      "brief": "Add a size() method to the Store class in store.mjs that returns the number of entries, and re-export nothing new (keep index.mjs exporting Store). size() must work after set() calls.",
+      "check": ["node", "--input-type=module", "-e", "import('./index.mjs').then(m => { const s = new m.Store(); s.set('a', 1); s.set('b', 2); if (s.size() !== 2) process.exit(1); })"],
+      "warm": false
+    },
+    {
+      "id": "large",
+      "kind": "large",
+      "brief": "Rename the function fetchData to loadData everywhere: its definition in api.mjs and all imports/calls in service.mjs and app.mjs. No references to fetchData may remain in .mjs files.",
+      "check": ["node", "--input-type=module", "-e", "import('node:fs').then(async fs => { const files = ['api.mjs', 'service.mjs', 'app.mjs']; for (const f of files) { const t = fs.readFileSync(f, 'utf8'); if (t.includes('fetchData')) process.exit(1); } const api = await import('./api.mjs'); if (typeof api.loadData !== 'function') process.exit(1); })"],
+      "warm": false
+    },
+    {
+      "id": "repeated",
+      "kind": "repeated-project",
+      "brief": "In calc.mjs (add is already fixed), add an exported mul(a, b) function that multiplies. Do not break add.",
+      "check": ["node", "--input-type=module", "-e", "import('./calc.mjs').then(m => { if (m.add(2, 3) !== 5 || m.mul(2, 3) !== 6) process.exit(1); })"],
+      "warm": "simple"
+    },
+    {
+      "id": "multi",
+      "kind": "multi-agent",
+      "brief": "Two independent bugs: in bugA.mjs first(items) returns the last element instead of the first; in bugB.mjs last(items) returns the first element instead of the last. Fix both.",
+      "check": ["node", "--input-type=module", "-e", "Promise.all([import('./bugA.mjs'), import('./bugB.mjs')]).then(([a, b]) => { if (a.first([1, 2]) !== 1 || b.last([1, 2]) !== 2) process.exit(1); })"],
+      "warm": false
+    }
+  ]
+}

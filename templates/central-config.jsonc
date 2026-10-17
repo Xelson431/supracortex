@@ -1,0 +1,25 @@
+// SupraCortex CENTRAL configuration — ~/.config/supracortex/config.jsonc
+//
+// This one file configures every project. Every feature is ON by default
+// (code graph, decision layer, value measurement, SupraSpace sync, parallel
+// planning, ...); add a key here only to change it everywhere, and delete the
+// key to go back to the default.
+//
+// Project files (<project>/.supracortex/config.jsonc) are NOT for settings.
+// They may hold only:
+//   "enabled": false            per-project kill switch
+//   "storage": { "directory", "driver" }   store identity (normally auto-detected)
+// Anything else there is ignored and reported by `supracode doctor`;
+// `supracode config migrate --yes` strips it (with backups).
+//
+// Inspect the effective settings: `supracode config show`.
+{
+  "$schema": "./config.schema.json",
+  "enabled": true,
+  "mode": "balanced",
+  "jev": {
+    // Decision provider: jev | laya-local | laya-hosted | custom.
+    // Switch with `supracode provider use <id>`.
+    "provider": "jev"
+  }
+}

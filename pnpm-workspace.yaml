@@ -1,0 +1,17 @@
+packages:
+  - "packages/*"
+allowBuilds:
+  '@biomejs/biome': true
+  '@google/genai': true
+  esbuild: true
+  msgpackr-extract: true
+  protobufjs: true
+minimumReleaseAgeExclude:
+  - '@aws-sdk/token-providers@3.1139.0'
+# Upstream pi-ai@0.87.1 pins @aws-sdk/token-providers@3.1138.0 exactly via
+# credential-provider-sso; use the nearest resolvable release instead. The AWS
+# SSO token path is unused by SupraCortex (no Bedrock use). Revisit on Pi bump.
+overrides:
+  '@aws-sdk/token-providers': 3.1139.0
+patchedDependencies:
+  '@earendil-works/pi-coding-agent@0.87.1': patches/@earendil-works__pi-coding-agent@0.87.1.patch

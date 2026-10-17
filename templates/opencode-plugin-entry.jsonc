@@ -1,0 +1,16 @@
+// Two ways to load the plugin into OpenCode.
+//
+// A) Project-local file loader (default; the installer creates this):
+//    <project>/.opencode/plugins/supracortex.ts
+//    which re-exports the adapter:
+//      export { SupraCortex } from "@local/supracortex-opencode/plugin";
+//
+// B) Reference it from opencode.json's plugin array (npm-style), IF you publish
+//    the adapter package to a registry your OpenCode can resolve:
+{
+  "plugin": [
+    "supracortex-opencode"
+  ]
+}
+// The project-local file loader (A) is recommended for local development
+// because it needs no publishing step and loads directly from this repo.

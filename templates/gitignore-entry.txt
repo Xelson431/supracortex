@@ -1,0 +1,3 @@
+# Runtime state is private and generated. Do not un-ignore this directory;
+# reviewed exports belong outside it and must be created explicitly.
+.supracortex/

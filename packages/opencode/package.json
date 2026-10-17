@@ -1,0 +1,22 @@
+{
+  "name": "@local/supracortex-opencode",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OpenCode plugin adapter for supracortex. Wires the framework-agnostic core to the OpenCode plugin API.",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts",
+    "./plugin": "./src/plugin.ts",
+    "./plugin-v2": "./src/plugin-v2.ts"
+  },
+  "dependencies": {
+    "@local/supracortex-core": "workspace:*"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": ">=0.0.0-beta-18721"
+  },
+  "peerDependenciesMeta": {
+    "@opencode-ai/plugin": { "optional": true }
+  }
+}
