@@ -1,6 +1,6 @@
 {
   "name": "supracortex",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Local-first, host-agnostic project memory and bounded context for coding agents. MCP stdio server, CLI, and optional OpenCode adapter.",
   "type": "module",
   "license": "MIT",
