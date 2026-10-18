@@ -61,7 +61,15 @@ async function withoutShim<T>(fn: () => Promise<T> | T): Promise<T> {
   }
 }
 
-test("fresh clone (no dist): wiring emits a runnable --experimental-strip-types command", async () => {
+test(
+  "fresh clone (no dist): wiring emits a runnable --experimental-strip-types command",
+  {
+    skip:
+      process.platform === "win32"
+        ? "fresh-clone fixture relies on POSIX workspace symlinks; the packed-artifact E2E covers this path on Windows"
+        : false,
+  },
+  async () => {
   const clone = await makeFreshClone();
   try {
     assert.equal(existsSync(join(clone.dir, "dist", "cli.js")), false, "temp copy must have no dist");

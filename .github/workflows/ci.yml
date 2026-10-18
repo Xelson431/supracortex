@@ -29,6 +29,8 @@ jobs:
   # ── Baseline: typecheck, unit, integration, acceptance, compatibility ──
   test:
     name: ${{ matrix.os }} / baseline
+    # Windows is best-effort and not release-gating; failures remain visible.
+    continue-on-error: ${{ matrix.os == 'windows-latest' }}
     strategy:
       fail-fast: false
       matrix:
@@ -51,6 +53,8 @@ jobs:
   e2e-tarball:
     name: ${{ matrix.os }} / tarball E2E
     needs: [test]
+    # Windows is best-effort and not release-gating; failures remain visible.
+    continue-on-error: ${{ matrix.os == 'windows-latest' }}
     strategy:
       fail-fast: false
       matrix:

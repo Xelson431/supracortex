@@ -8,7 +8,59 @@ import { chmod, mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { pathToFileURL } from "node:url";
 import { connect, genericSnippet } from "../../packages/opencode/src/connect.ts";
+
+const isWindows = process.platform === "win32";
+
+interface FakeClaude {
+  bin: string;
+  env: NodeJS.ProcessEnv;
+  log: string;
+}
+
+/**
+ * A fake `claude` CLI usable on both platforms. POSIX keeps the original shell
+ * script. Windows cannot execute a shebang script via spawnSync, so it points
+ * SUPRACODE_CLAUDE_BIN at node itself and preloads a hook that inspects argv.
+ * (Node handles `--version` before preloads, so that probe is not logged.)
+ */
+async function fakeClaudeCli(home: string, opts: { failAdd?: boolean } = {}): Promise<FakeClaude> {
+  const log = join(home, "calls.log");
+  const env = { ...process.env, HOME: home };
+  if (isWindows) {
+    const hook = join(home, "claude-fake.mjs");
+    const failAdd = opts.failAdd === true;
+    await writeFile(
+      hook,
+      [
+        'import { appendFileSync } from "node:fs";',
+        `const log = ${JSON.stringify(log)};`,
+        // Node treats the leading "mcp" subcommand as the entry path, so
+        // argv[1] is that path and argv[2...] are the remaining arguments.
+        'const args = ["mcp", ...process.argv.slice(2)];',
+        'appendFileSync(log, `${args.join(" ")}\\n`);',
+        'const add = args[0] === "mcp" && args[1] === "add";',
+        `process.exit(add && ${failAdd ? "true" : "false"} ? 1 : 0);`,
+        "",
+      ].join("\n"),
+    );
+    return {
+      bin: process.execPath,
+      log,
+      env: { ...env, NODE_OPTIONS: `--import "${pathToFileURL(hook).href}"` },
+    };
+  }
+  const bin = join(home, "claude");
+  await writeFile(
+    bin,
+    opts.failAdd
+      ? `#!/bin/sh\necho "$@" >> ${JSON.stringify(log)}\nif [ "$1" = "--version" ]; then exit 0; fi\nif [ "$1 $2" = "mcp add" ]; then exit 1; fi\nexit 0\n`
+      : `#!/bin/sh\necho "$@" >> ${JSON.stringify(log)}\nexit 0\n`,
+  );
+  await chmod(bin, 0o755);
+  return { bin, log, env };
+}
 
 /** Spawn a configured stdio server and complete initialize + tools/list. */
 async function handshake(command: string, args: string[], cwd: string): Promise<string[]> {
@@ -64,16 +116,22 @@ test("codex: global block is rootless and the command speaks MCP", async () => {
 
 test("claude: uses `claude mcp add -s user` and replaces a stale entry first", async () => {
   const h = await fakeHome();
-  const log = join(h, "calls.log");
-  const bin = join(h, "claude");
-  await writeFile(bin, `#!/bin/sh\necho "$@" >> ${JSON.stringify(log)}\nexit 0\n`);
-  await chmod(bin, 0o755);
-  const r = await connect("claude", { env: { ...process.env, HOME: h, SUPRACODE_CLAUDE_BIN: bin } });
+  const fake = await fakeClaudeCli(h);
+  const r = await connect("claude", { env: { ...fake.env, SUPRACODE_CLAUDE_BIN: fake.bin } });
   assert.equal(r.ok, true);
-  const calls = (await readFile(log, "utf8")).trim().split("\n");
-  assert.equal(calls[0], "--version");
-  assert.equal(calls[1], "mcp remove supracortex -s user");
-  assert.match(calls[2]!, /^mcp add -s user supracortex -- /);
+  const calls = (await readFile(fake.log, "utf8")).trim().split("\n");
+  if (isWindows) {
+    // Node normally prints --version before ESM preloads run, so that probe is
+    // not logged; tolerate it either way. CLI use (instead of the JSON
+    // fallback) still proves the probe succeeded.
+    const commandCalls = calls.filter((call) => call !== "--version");
+    assert.equal(commandCalls[0], "mcp remove supracortex -s user");
+    assert.match(commandCalls[1]!, /^mcp add -s user supracortex -- /);
+  } else {
+    assert.equal(calls[0], "--version");
+    assert.equal(calls[1], "mcp remove supracortex -s user");
+    assert.match(calls[2]!, /^mcp add -s user supracortex -- /);
+  }
 });
 
 test("claude without the CLI: edits ~/.claude.json user scope, preserving other keys", async () => {
@@ -114,14 +172,8 @@ test("claude CLI: a failed `mcp add` preserves the prior registration", async ()
   const h = await fakeHome();
   const prior = { type: "stdio", command: "/old/bin/node", args: ["/old/server.js"], env: {} };
   await writeFile(join(h, ".claude.json"), JSON.stringify({ theme: "dark", mcpServers: { supracortex: prior } }), "utf8");
-  const log = join(h, "calls.log");
-  const bin = join(h, "claude");
-  await writeFile(
-    bin,
-    `#!/bin/sh\necho "$@" >> ${JSON.stringify(log)}\nif [ "$1" = "--version" ]; then exit 0; fi\nif [ "$1 $2" = "mcp add" ]; then exit 1; fi\nexit 0\n`,
-  );
-  await chmod(bin, 0o755);
-  const env = { ...process.env, HOME: h, SUPRACODE_CLAUDE_BIN: bin };
+  const fake = await fakeClaudeCli(h, { failAdd: true });
+  const env = { ...fake.env, SUPRACODE_CLAUDE_BIN: fake.bin };
 
   const r = await connect("claude", { env });
   assert.equal(r.ok, false);

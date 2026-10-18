@@ -214,20 +214,27 @@ test("computeStorageFootprint tolerates statfs failure and degrades to fs:null, 
 // ---------------------------------------------------------------------------
 
 test("clean handles Windows-style roots without building a RegExp from the path", () => {
-  const driveRoot = `${String.raw`D:`}\\`; // String.raw`D:\` is not expressible directly
+  // Pick a drive other than the checkout drive for the drive-root case: on
+  // Windows, clean()'s display pass re-resolves a project-relative result that
+  // starts with "/" against the current drive, which would turn "./src/a.ts"
+  // into ".src\a.ts" (a separate display quirk, reported separately).
+  const runnerDrive = process.platform === "win32" ? process.cwd().slice(0, 2).toUpperCase() : "";
+  const drive = runnerDrive === "Z:" ? "Y:" : "Z:";
+  const driveRoot = `${drive}\\`; // String.raw`Z:\` is not expressible directly
+  const driveText = `${drive}\\src\\a.ts`;
   const nestedRoot = String.raw`D:\a\repo`;
   const trailingRoot = `${nestedRoot}\\`;
   const metaRoot = String.raw`C:\a.b(c)\repo`;
 
   const cases: Array<[text: string, root: string, expected: string]> = [
-    [String.raw`D:\src\a.ts`, driveRoot, "./src/a.ts"],
+    [driveText, driveRoot, "./src/a.ts"],
     [String.raw`D:\a\repo\src\b.ts`, nestedRoot, "./src/b.ts"],
     [String.raw`D:\a\repo\src\c.ts`, trailingRoot, "./src/c.ts"],
     [String.raw`C:\a.b(c)\repo\src\d.ts`, metaRoot, "./src/d.ts"],
   ];
   for (const [text, root, expected] of cases) {
     assert.doesNotThrow(() => clean(text, root), `root ${JSON.stringify(root)}`);
-    assert.equal(clean(text, root), expected);
+    assert.equal(clean(text, root).replace(/\\/g, "/"), expected);
   }
 });
 

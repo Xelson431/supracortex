@@ -85,18 +85,30 @@ test("D: JSONL tail is bounded and retains final records", async () => {
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
-test("G/I: sanitization removes secrets but keeps identifiable paths", () => {
-  const root = "/tmp/project-sensitive"; const home = process.env.HOME ?? "/home/user";
+test("G/I: sanitization removes secrets but keeps identifiable paths", async () => {
+  // Use a root shape the platform actually resolves. A POSIX literal on Windows
+  // resolves onto the current drive, so the exact root never matches and the
+  // sanitizer cannot relativize it. Separators are normalized below.
+  const win = process.platform === "win32";
+  const root = win ? String.raw`D:\project-sensitive` : "/tmp/project-sensitive";
+  const home = process.env.HOME?.trim() || (win ? String.raw`C:\Users\user` : "/home/user");
   const homeConfig = join(home, ".config", "supracortex", "config.jsonc");
   const secret = "sk-test-recognizable-secret";
-  const checks = sanitizeDiagnostics([{ id: "x", title: "X", status: "fail", evidence: "configured", detail: `${root}/src/a.ts ${homeConfig} /opt/other ${secret}`, data: { nested: { path: root, token: secret } } }], root);
-  const text = JSON.stringify(checks);
+  const checks = await withEnv({ HOME: home }, async () =>
+    sanitizeDiagnostics([{ id: "x", title: "X", status: "fail", evidence: "configured", detail: `${root}/src/a.ts ${homeConfig} /opt/other ${secret}`, data: { nested: { path: root, token: secret } } }], root),
+  );
+  // Normalize separators inside string values before serializing, so JSON
+  // escaping cannot hide a leaked Windows path behind a doubled backslash.
+  const text = JSON.stringify(checks, (_key, value) =>
+    typeof value === "string" ? value.replace(/\\/g, "/") : value,
+  );
+  const normalizedRoot = root.replace(/\\/g, "/");
   // Project-root paths stay project-relative; the account name in HOME paths is
   // abbreviated; unrelated absolute paths remain diagnosable; secrets still go.
-  assert.ok(!text.includes(root), "project root is not exposed");
+  assert.ok(!text.includes(normalizedRoot), "project root is not exposed");
   assert.ok(text.includes("./src/a.ts"), "project file remains identifiable");
   assert.ok(text.includes("~/.config/supracortex/config.jsonc"), "HOME path renders as ~/...");
-  assert.ok(!text.includes(home), "account-specific HOME prefix is hidden");
+  assert.ok(!text.includes(home.replace(/\\/g, "/")), "account-specific HOME prefix is hidden");
   assert.ok(text.includes("/opt/other"), "unrelated absolute path is preserved");
   assert.ok(!text.includes(secret), "secret is redacted");
   assert.equal(checks[0]?.status, "fail"); assert.equal(checks[0]?.evidence, "configured"); assert.equal(checks[0]?.id, "x");

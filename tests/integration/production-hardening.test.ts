@@ -6,6 +6,19 @@ import { join } from "node:path";
 import { createSqliteStore, Engine, JsonlStore, resolveConfig } from "../../packages/core/src/index.ts";
 import { safeReadFile } from "../../packages/core/src/diagnostics/index.ts";
 
+/** Windows can hold SQLite handles briefly after close; retry, then rethrow. */
+async function removeWithRetry(target: string, attempts = 10, delayMs = 100): Promise<void> {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      await rm(target, { recursive: true, force: true });
+      return;
+    } catch (error) {
+      if (attempt >= attempts) throw error;
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+  }
+}
+
 async function fixture(t: { after(fn: () => Promise<void>): void }) {
   const base = await mkdtemp(join(tmpdir(), "sc-hardening-"));
   t.after(() => rm(base, { recursive: true, force: true }));
@@ -165,7 +178,13 @@ test("forced refresh completes after a concurrent refresh", async (t) => {
 
 test("SQLite-backed value reports and usage deduplication use the storage contract", async (t) => {
   const base = await mkdtemp(join(tmpdir(), "sc-sqlite-parity-"));
-  t.after(() => rm(base, { recursive: true, force: true }));
+  let engine: Engine | undefined;
+  // Close the engine before removing its store; Windows then needs a short
+  // retry while the SQLite handle is released.
+  t.after(async () => {
+    await engine?.close();
+    await removeWithRetry(base);
+  });
   const root = join(base, "project");
   await mkdir(root);
   await writeFile(join(root, "auth.ts"), "export const auth = true;");
@@ -177,8 +196,7 @@ test("SQLite-backed value reports and usage deduplication use the storage contra
     throw error;
   }
   const { config } = resolveConfig({ project: { enabled: true, telemetry: { valueMeasurement: { enabled: true, maxEvents: 20_000, maxAgeDays: 30 } } } });
-  const engine = new Engine({ config, store, projectRoot: root, pluginVersion: "test" });
-  t.after(() => engine.close());
+  engine = new Engine({ config, store, projectRoot: root, pluginVersion: "test" });
   await engine.recordContextInjection({ taskId: "sqlite-task", incarnationId: "sqlite-incarnation", injected: true });
   const report = await engine.valueReport();
   assert.equal(report.sample.injected, 1);
@@ -200,7 +218,13 @@ test("SQLite-backed value reports and usage deduplication use the storage contra
 
 test("session metric retention is equivalent for SQLite logical files", async (t) => {
   const base = await mkdtemp(join(tmpdir(), "sc-sqlite-retention-"));
-  t.after(() => rm(base, { recursive: true, force: true }));
+  let engine: Engine | undefined;
+  // Close the engine before removing its store; Windows then needs a short
+  // retry while the SQLite handle is released.
+  t.after(async () => {
+    await engine?.close();
+    await removeWithRetry(base);
+  });
   const root = join(base, "project");
   await mkdir(root);
   const store = await createSqliteStore(join(root, ".supracortex"));
@@ -214,8 +238,7 @@ test("session metric retention is equivalent for SQLite logical files", async (t
       },
     },
   });
-  const engine = new Engine({ config, store, projectRoot: root, pluginVersion: "test", now: () => now });
-  t.after(() => engine.close());
+  engine = new Engine({ config, store, projectRoot: root, pluginVersion: "test", now: () => now });
   await store.writeJson("metrics/session-2026-08-01.json", { old: true });
   await store.writeJson("metrics/session-2026-09-10.json", { recent: true });
   await engine.persistMetrics();

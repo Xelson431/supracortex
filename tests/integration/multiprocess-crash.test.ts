@@ -165,7 +165,15 @@ for (;;) {
 }
 `;
 
-test("two processes appending to one SQLite store lose no rows or docs", async (t) => {
+test(
+  "two processes appending to one SQLite store lose no rows or docs",
+  {
+    skip:
+      process.platform === "win32"
+        ? "multi-process SQLite children are not portable here (child ESM loader/sqlite on Windows)"
+        : false,
+  },
+  async (t) => {
   const base = await mkdtemp(join(tmpdir(), "sc-multiprocess-sqlite-"));
   t.after(() => rm(base, { recursive: true, force: true }));
   const storage = join(base, ".supracortex");

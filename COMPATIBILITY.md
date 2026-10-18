@@ -29,7 +29,7 @@ Verification levels used below:
 | Node.js | 22.23.1 | Built CLI + stdio MCP server; declared minimum is 22.6 |
 | pnpm | 11.9.0 | Workspace manager; npm also works |
 | MCP SDK | 1.29.0 | `@modelcontextprotocol/sdk` (pinned) |
-| CI platforms | Ubuntu, macOS, Windows | Workflow matrix for typecheck, tests, and the tarball gate |
+| CI platforms | Ubuntu, macOS (release-gating); Windows (best-effort) | Workflow matrix runs all three; Windows failures are visible but non-blocking |
 
 ## MCP toolset
 
@@ -83,9 +83,11 @@ against it.
 ## Windows and shell support
 
 The core, CLI, and stdio MCP server run on Node.js and are designed for macOS,
-Linux, and Windows. The compatibility CI matrix runs typecheck and tests on
-Ubuntu, macOS, and Windows, and the packed-tarball gate exercises the Node MCP
-entrypoint on all three.
+Linux, and Windows. Ubuntu and macOS are release-gating in CI. **Windows is
+best-effort**: the matrix still runs typecheck, tests, and the packed gate, but
+Windows failures are non-blocking and are not a support claim. The tests that
+are skipped on Windows are POSIX-specific (file modes, read-only rename
+semantics, recycled-PID locks, multi-process SQLite children).
 
 The `supracortex-mcp` launcher is a **POSIX bash script** and is not supported
 on Windows. On Windows, invoke the Node entrypoint:

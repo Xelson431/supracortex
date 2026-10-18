@@ -165,7 +165,15 @@ test("concurrent user edit between stage and commit aborts and rolls back", asyn
 // 3. Read-only file → clean failure + rollback
 // ---------------------------------------------------------------------------
 
-test("read-only file is replaced via temp+rename (same-dir rename succeeds on Unix)", async () => {
+test(
+  "read-only file is replaced via temp+rename (same-dir rename succeeds on Unix)",
+  {
+    skip:
+      process.platform === "win32"
+        ? "Windows rename over a read-only file returns EPERM; this asserts Unix rename semantics"
+        : false,
+  },
+  async () => {
   const root = await tempProject();
   const target = makeTarget(root, ".mcp.json");
   await writeFile(target.file, JSON.stringify({ mcpServers: {} }), "utf8");

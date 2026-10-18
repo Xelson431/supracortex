@@ -60,7 +60,10 @@ export const clean = (s: string, root?: string) => {
   let text = redactSecrets(s).text;
   const home = process.env.HOME;
   if (root) text = replaceProjectRoot(text, root);
-  return text.replace(/(?:[A-Za-z]:)?(?:[/\\][^\s"']+)+/g, (p) => {
+  return text.replace(/(?:[A-Za-z]:)?(?:[/\\][^\s"']+)+/g, (p, offset: number, whole: string) => {
+    // The project-root pass already rendered this as `./<relative>`; do not
+    // resolve the leading `/` again (on Windows that produced `.src\a.ts`).
+    if (offset > 0 && whole[offset - 1] === ".") return p;
     // Project-root paths stay project-relative so diagnostics point at the
     // relevant file without exposing the checkout location.
     if (root) { const r = relative(resolve(root), resolve(p)); if (r && !r.startsWith("..") && !isAbsolute(r)) return r; }

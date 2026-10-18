@@ -147,7 +147,13 @@ test("global reinstall refreshes owned loader and preserves the enabled setting"
     // The SupraCode profile is a V1 (OpenCode 1.x) config root; V2 has its
     // own dedicated root, so the loader no longer switches on generation.
     assert.match(loaderText, /export const SupraCortex = async/);
-    assert.match(loaderText, /dist\/opencode\.js/);
+    // Windows file URLs carry backslashes; normalize before matching. CI may
+    // run before `pnpm build`, in which case the loader points at source.
+    const normalizedLoader = loaderText.replace(/\\/g, "/");
+    assert.match(
+      normalizedLoader,
+      /dist\/opencode\.js|packages\/opencode\/src\/(?:plugin|opencode)\.ts/,
+    );
     const cfg = await readFile(join(fakeHome, ".config", "supracortex", "config.jsonc"), "utf8");
     assert.match(cfg, /"enabled": true/);
   } finally {
