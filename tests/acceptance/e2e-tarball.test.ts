@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert";
 import { execFile } from "node:child_process";
-import { mkdtemp, mkdir, writeFile, readFile, stat, rm } from "node:fs/promises";
+import { mkdtemp, mkdir, writeFile, readFile, stat, rm, realpath } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, dirname, resolve, sep } from "node:path";
+import { join, dirname, resolve, sep, relative, isAbsolute } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
@@ -12,6 +12,12 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 const run = promisify(execFile);
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const npmBin = process.platform === "win32" ? "npm.cmd" : "npm";
+
+/** True when `p` is inside `root`, comparing canonical paths (macOS /var). */
+async function isUnder(p: string, root: string): Promise<boolean> {
+  const rel = relative(await realpath(root), await realpath(p));
+  return rel === "" || (!rel.startsWith("..") && !isAbsolute(rel));
+}
 
 /**
  * Only OS-level variables cross into subprocesses. Nothing from the invoking
@@ -290,8 +296,8 @@ test("isolated packed-artifact install gate (CLI + TUI + profile + MCP)", async 
     const specs = (tui.plugin ?? []).map(specOf);
     const brand = specs.find((s) => s.includes("node_modules") && s.endsWith(join("supracortex", "packages", "tui")));
     assert.ok(brand, "tui.json points at the installed brand TUI package dir");
-    assert.ok(brand!.startsWith(installedPkg), "brand TUI path lives under the installed artifact");
-    assert.ok(!brand!.startsWith(repoRoot), "brand TUI path is not the source checkout");
+    assert.ok(await isUnder(brand!, installedPkg), "brand TUI path lives under the installed artifact");
+    assert.ok(!(await isUnder(brand!, repoRoot)), "brand TUI path is not the source checkout");
     await stat(join(brand!, "package.json"));
     await stat(join(brand!, "dist", "tui.js"));
     await stat(join(brand!, "dist", "tui-v2.js"));
@@ -300,8 +306,8 @@ test("isolated packed-artifact install gate (CLI + TUI + profile + MCP)", async 
     const bundleMatch = loader.match(/const bundle = "file:\/\/([^"]+)";/);
     assert.ok(bundleMatch, "loader references a plugin bundle");
     const bundlePath = bundleMatch![1]!;
-    assert.ok(bundlePath.startsWith(installedPkg), "plugin bundle lives under the installed artifact");
-    assert.ok(!bundlePath.startsWith(repoRoot), "plugin bundle is not the source checkout");
+    assert.ok(await isUnder(bundlePath, installedPkg), "plugin bundle lives under the installed artifact");
+    assert.ok(!(await isUnder(bundlePath, repoRoot)), "plugin bundle is not the source checkout");
     await stat(bundlePath);
 
     await stat(join(profileDir, "commands", "cortex-status.md"));
@@ -341,11 +347,11 @@ test("isolated packed-artifact install gate (CLI + TUI + profile + MCP)", async 
     const v2Tui = join(scratch.home, ".config", "supracode2", "plugins", "supracode-v2", "tui.ts");
     const adapter = (await readFile(v2Index, "utf8")).match(/const adapter = "([^"]+)";/)?.[1];
     assert.ok(adapter, "V2 loader references the adapter bundle");
-    assert.ok(adapter!.startsWith(installedPkg), "V2 adapter lives under the installed artifact");
+    assert.ok(await isUnder(adapter!, installedPkg), "V2 adapter lives under the installed artifact");
     await stat(adapter!);
     const v2TuiBundle = (await readFile(v2Tui, "utf8")).match(/from "([^"]+)"/)?.[1];
     assert.ok(v2TuiBundle, "V2 TUI loader references the TUI bundle");
-    assert.ok(v2TuiBundle!.startsWith(installedPkg), "V2 TUI bundle lives under the installed artifact");
+    assert.ok(await isUnder(v2TuiBundle!, installedPkg), "V2 TUI bundle lives under the installed artifact");
     await stat(v2TuiBundle!);
   });
 
