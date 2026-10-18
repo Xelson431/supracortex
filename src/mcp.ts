@@ -325,7 +325,7 @@ export async function createMcpServer(projectRoot = process.env.SUPRACORTEX_ROOT
   const toolMeta: Record<string, { description: string; annotations?: Record<string, unknown> }> = {
     cortex_context: { description: `${BOOTSTRAP_SENTENCE} Prepare a bounded, explained context packet for a task: relevant memory, files, summaries, git changes, skill and MCP recommendations, and a token budget. Read-only; does not call a model.`, annotations: { readOnlyHint: true } },
     cortex_search: { description: "Search persistent project memory (facts, decisions, conventions, failures, constraints) for entries relevant to a query. Returns ranked entries with reasons. Read-only.", annotations: { readOnlyHint: true } },
-    cortex_record: { description: "Record a VERIFIED durable memory entry or task outcome. Durable facts/decisions/conventions/constraints require evidence (sourceReferences). Content is redacted for likely secrets. Write operation." },
+    cortex_record: { description: "Record a durable memory entry or task outcome. Active durable facts/decisions/conventions/constraints require evidence (sourceReferences); pass status:\"candidate\" to submit one for review without evidence. Content is redacted for likely secrets. Write operation." },
     cortex_status: { description: "Report engine status, schema/protocol versions, and host capabilities. Read-only.", annotations: { readOnlyHint: true } },
     cortex_timeline: { description: "Recall structural events (session/tool/task/file/test) within a bounded time window. Read-only.", annotations: { readOnlyHint: true } },
     cortex_detail: { description: "Show one structural event by ID. Read-only.", annotations: { readOnlyHint: true } },

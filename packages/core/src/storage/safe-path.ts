@@ -105,8 +105,13 @@ export async function openRegularFile(path: string, flags: number): Promise<File
   } catch (error) {
     if (!isMissing(error) || !(flags & constants.O_CREAT)) throw error;
   }
-  if (!constants.O_NOFOLLOW) throw new Error("safe no-follow open unavailable");
-  const handle = await open(path, flags | constants.O_NOFOLLOW | (constants.O_NONBLOCK ?? 0), 0o600);
+  // POSIX has O_NOFOLLOW; Windows does not. There, the lstat pre-check plus
+  // the post-open dev/ino identity check are the available protection. Refuse
+  // to run without O_NOFOLLOW on POSIX so a degraded platform cannot silently
+  // disable the symlink defense.
+  const noFollow = constants.O_NOFOLLOW;
+  if (!noFollow && process.platform !== "win32") throw new Error("safe no-follow open unavailable");
+  const handle = await open(path, flags | (noFollow ?? 0) | (constants.O_NONBLOCK ?? 0), 0o600);
   try {
     const opened = await handle.stat();
     if (!opened.isFile() || (before && (before.dev !== opened.dev || before.ino !== opened.ino))) {

@@ -184,7 +184,7 @@ export function buildTools(rt: PluginRuntime): Record<string, ToolDefinition> {
 
     cortex_record_memory: tool({
       description:
-        "Record a VERIFIED durable memory entry. Durable facts/decisions/conventions/constraints require evidence (sourceReferences). Content is redacted for likely secrets. Never record secrets or transcripts.",
+        "Record a durable memory entry. Active durable facts/decisions/conventions/constraints require evidence (sourceReferences); pass status \"candidate\" to submit one for review without evidence. Content is redacted for likely secrets. Never record secrets or transcripts.",
       args: {
         kind: z.enum(["fact", "decision", "convention", "failure", "constraint", "task-outcome"]),
         content: z.string(),

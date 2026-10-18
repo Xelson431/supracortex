@@ -19,6 +19,9 @@ jobs:
         # so CI exercises that toolchain minimum. The package `engines` floor
         # stays at >= 22.6 because the runtime still supports it.
         node: ['22.13.0']
+    env:
+      # Node 22.13 still needs the flag to import .ts test entrypoints.
+      NODE_OPTIONS: --experimental-strip-types
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

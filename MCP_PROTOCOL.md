@@ -61,6 +61,11 @@ are off by default and require both a built generation and
 The server advertises tools only: no resource, prompt, or completion capability
 is exposed until it has a stable, bounded implementation.
 
+Durable writes are `active` by default when they carry evidence. Pass
+`status: "candidate"` to submit a durable entry for review without evidence;
+the entry then appears in `cortex_review` `list` and activates only via
+`approve`.
+
 ## `cortex_review` actions
 
 | Action | Semantics |
