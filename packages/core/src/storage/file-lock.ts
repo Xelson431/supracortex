@@ -208,7 +208,11 @@ export async function acquireFileLock(
       // ENOENT here means our freshly mkdir'd lock dir was concurrently
       // removed (a legit stale-break racing our acquire): treat as contention
       // and retry within the deadline rather than failing the writer.
-      if (!isEexist(err) && !isEnoent(err)) throw err;
+      // Windows also reports transient EPERM/EACCES/EBUSY while another
+      // process is creating or removing the same lock directory.
+      const code = (err as NodeJS.ErrnoException)?.code;
+      const transientWin = code === "EPERM" || code === "EACCES" || code === "EBUSY";
+      if (!isEexist(err) && !isEnoent(err) && !transientWin) throw err;
       // Lock exists. Never steal a proven-live writer merely because a long
       // operation exceeded an arbitrary age threshold.
       const reclaimed = await reclaimIfStale(lockDir, metaPath, staleMs);
