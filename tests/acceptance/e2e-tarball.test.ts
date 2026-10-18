@@ -14,6 +14,10 @@ const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const isWindows = process.platform === "win32";
 const npmBin = isWindows ? "npm.cmd" : "npm";
 
+/** Turn a loader spec (file URL or path) into a filesystem path. */
+const pathFromSpec = (spec: string): string =>
+  spec.startsWith("file:") ? fileURLToPath(spec) : decodeURIComponent(spec);
+
 /** Quote an argument for cmd.exe when the path may contain spaces. */
 function quoteWindowsArg(arg: string): string {
   return /[\s"]/.test(arg) ? `"${arg.replace(/"/g, '""')}"` : arg;
@@ -326,7 +330,7 @@ test("isolated packed-artifact install gate (CLI + TUI + profile + MCP)", async 
     const loader = await readFile(join(profileDir, "plugins", "supracortex.ts"), "utf8");
     const bundleMatch = loader.match(/const bundle = "file:\/\/([^"]+)";/);
     assert.ok(bundleMatch, "loader references a plugin bundle");
-    const bundlePath = bundleMatch![1]!;
+    const bundlePath = pathFromSpec(`file://${bundleMatch![1]!}`);
     assert.ok(await isUnder(bundlePath, installedPkg), "plugin bundle lives under the installed artifact");
     assert.ok(!(await isUnder(bundlePath, repoRoot)), "plugin bundle is not the source checkout");
     await stat(bundlePath);
@@ -366,11 +370,11 @@ test("isolated packed-artifact install gate (CLI + TUI + profile + MCP)", async 
     await stat(join(scratch.home, ".config", "supracortex", "config.jsonc"));
     const v2Index = join(scratch.home, ".config", "supracode2", "plugins", "supracode-v2", "index.ts");
     const v2Tui = join(scratch.home, ".config", "supracode2", "plugins", "supracode-v2", "tui.ts");
-    const adapter = (await readFile(v2Index, "utf8")).match(/const adapter = "([^"]+)";/)?.[1];
+    const adapter = pathFromSpec((await readFile(v2Index, "utf8")).match(/const adapter = "([^"]+)";/)?.[1] ?? "");
     assert.ok(adapter, "V2 loader references the adapter bundle");
     assert.ok(await isUnder(adapter!, installedPkg), "V2 adapter lives under the installed artifact");
     await stat(adapter!);
-    const v2TuiBundle = (await readFile(v2Tui, "utf8")).match(/from "([^"]+)"/)?.[1];
+    const v2TuiBundle = pathFromSpec((await readFile(v2Tui, "utf8")).match(/from "([^"]+)"/)?.[1] ?? "");
     assert.ok(v2TuiBundle, "V2 TUI loader references the TUI bundle");
     assert.ok(await isUnder(v2TuiBundle!, installedPkg), "V2 TUI bundle lives under the installed artifact");
     await stat(v2TuiBundle!);
