@@ -25,7 +25,8 @@
 import { existsSync, lstatSync, readdirSync, readlinkSync, symlinkSync, unlinkSync, mkdirSync } from "node:fs";
 import { copyFile, mkdir, readFile, rm, rmdir, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
-import { basename, dirname, join } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import { applyEdits, modify, parse, type ParseError } from "jsonc-parser";
 
 export const OWNED_MARKER = "supracortex:owned";
@@ -194,6 +195,9 @@ export interface ProfileContents {
 }
 
 function pluginLoader(bundle: string): string {
+  // A Windows path must become a valid file URL (`file:///D:/...`); naive
+  // `"file://" + path` produced `file://D://a//...`, which Node rejects.
+  const bundleUrl = bundle.startsWith("file:") ? bundle : pathToFileURL(resolve(bundle)).href;
   return (
     `// ${OWNED_MARKER}\n` +
     `// SupraCortex engine for the SupraCode profile (OpenCode V1 plugin contract).\n` +
@@ -202,7 +206,7 @@ function pluginLoader(bundle: string): string {
     `import { existsSync } from "node:fs";\n` +
     `import { join } from "node:path";\n` +
     `import { fileURLToPath } from "node:url";\n` +
-    `const bundle = ${JSON.stringify(`file://${bundle}`)};\n` +
+    `const bundle = ${JSON.stringify(bundleUrl)};\n` +
     `export const SupraCortex = async (input, options) => {\n` +
     `  const root = input?.directory ?? process.cwd();\n` +
     `  const local = join(root, ".opencode", "plugins", "supracortex.ts");\n` +
