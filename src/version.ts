@@ -5,7 +5,7 @@
  * the root package manifest. Keeping the runtime import here avoids each host
  * adapter carrying an independently maintained version string.
  */
-export const PACKAGE_VERSION = "0.2.0";
+export const PACKAGE_VERSION = "0.2.1";
 
 /** SupraCortex operation contract, distinct from the MCP protocol date. */
 export const TOOLSET_API_VERSION = "2.0.0";

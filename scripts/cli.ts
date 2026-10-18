@@ -108,7 +108,6 @@ async function main(): Promise<number> {
   if (cmd === undefined) {
     // Bare `supracortex`: interactive OpenCode when attached to a TTY, help
     // text otherwise (never a hanging agent session on a pipe).
-    if (process.stdin.isTTY) return runOpenCodeMain([]);
     log(await usage());
     return 0;
   }
@@ -216,7 +215,7 @@ async function main(): Promise<number> {
       const target = process.argv[3] ?? "";
       const hosts = target === "all" ? (["codex", "claude"] as const) : (CONNECT_HOSTS as readonly string[]).includes(target) ? [target as (typeof CONNECT_HOSTS)[number]] : [];
       if (!hosts.length) {
-        log(`Usage: supracode ${cmd} <codex|claude|generic|all>`);
+        log(`Usage: supracortex ${cmd} <codex|claude|generic|all>`);
         return 2;
       }
       let failed = false;
@@ -342,7 +341,7 @@ async function main(): Promise<number> {
       return 2;
     }
     case "jev": {
-      // supracode jev [status|key [KEY|-]|forget|login|test]
+      // supracortex jev [status|key [KEY|-]|forget|login|test]
       // Where Jev's OpenRouter key comes from, and a way to set it.
       const core = await import("../packages/core/src/index.ts");
       const sub = process.argv[3] ?? "status";
@@ -354,7 +353,7 @@ async function main(): Promise<number> {
         const src = !cred ? "none" : cred.source === "env" ? `environment (${name})` : cred.source;
         log(`provider   ${p.id} ${p.model}`);
         log(`key        ${cred ? `set — from ${src}` : `not set -> deterministic context`}`);
-        log(`lookup     1) ${name} env  2) ${core.USER_CREDENTIALS_DIR}/*.env  3) OpenCode/SupraCode OpenRouter login  4) system files`);
+        log(`lookup     1) ${name} env  2) ${core.USER_CREDENTIALS_DIR}/*.env  3) OpenCode/OpenCode OpenRouter login  4) system files`);
       };
       if (sub === "status") {
         describe();
@@ -367,7 +366,7 @@ async function main(): Promise<number> {
         let value = process.argv[4];
         if (!value || value === "-") {
           if (process.stdin.isTTY && !value) {
-            log("usage: supracode jev key <OPENROUTER_KEY>   (or: echo $KEY | supracode jev key -)");
+            log("usage: supracortex jev key <OPENROUTER_KEY>   (or: echo $KEY | supracortex jev key -)");
             return 2;
           }
           value = (await new Promise<string>((res) => { let d = ""; process.stdin.on("data", (c) => (d += c)); process.stdin.on("end", () => res(d)); })).trim();
@@ -411,7 +410,7 @@ async function main(): Promise<number> {
         log(c.ok ? `ACTIVE (${c.latencyMs}ms, model ${c.echoedModel ?? p.model})` : `not active: ${c.reason}`);
         return c.ok ? 0 : 1;
       }
-      log("usage: supracode jev [status|key <KEY>|key -|forget|login|test]");
+      log("usage: supracortex jev [status|key <KEY>|key -|forget|login|test]");
       return 2;
     }
     case "provider": {
@@ -432,12 +431,12 @@ async function main(): Promise<number> {
         log(`model      ${s.model}`);
         log(`credential ${s.credential}${s.apiKeyEnv ? ` (${s.apiKeyEnv}${s.credentialSource ? ` from ${s.credentialSource === "env" ? "environment" : s.credentialSource}` : ""})` : ""}`);
         log(`budget     deadline ${s.deadlineMs}ms, per-request ${s.enrichmentBudgetMs}ms`);
-        log(`config     central ${s.configSource.global}${s.configSource.ignoredProjectKeys.length ? `\n           ignored stale project keys: ${s.configSource.ignoredProjectKeys.join(", ")} (run 'supracode config migrate --yes')` : ""}`);
+        log(`config     central ${s.configSource.global}${s.configSource.ignoredProjectKeys.length ? `\n           ignored stale project keys: ${s.configSource.ignoredProjectKeys.join(", ")} (run 'supracortex config migrate --yes')` : ""}`);
         return 0;
       }
       if (sub === "use") {
         const id = process.argv[4];
-        if (!id || id.startsWith("--")) { log("usage: supracode provider use <jev|laya-local|laya-hosted|custom> [--endpoint URL] [--model ID]"); return 2; }
+        if (!id || id.startsWith("--")) { log("usage: supracortex provider use <jev|laya-local|laya-hosted|custom> [--endpoint URL] [--model ID]"); return 2; }
         try {
           const r = await providerCli.providerUse(projectRoot, id, { endpoint: valueAfter("--endpoint"), model: valueAfter("--model") });
           log(`decision provider -> ${r.provider} (${r.path})`);
@@ -917,7 +916,7 @@ async function runOpenCodeMain(raw: string[]): Promise<number> {
     }
     refreshConfigFarm(paths);
   } catch (err) {
-    log(`supracode: cannot prepare the isolated profile (${(err as Error).message}).`);
+    log(`supracortex: cannot prepare the isolated profile (${(err as Error).message}).`);
     return 1;
   }
   // Live shared layer: stock MCP servers, providers and skills (never plugins).
@@ -937,7 +936,7 @@ async function runOpenCodeMain(raw: string[]): Promise<number> {
   return new Promise<number>((settle) => {
     child.on("error", (err) => {
       log(
-        `supracode run: cannot launch "${bin}" (${err instanceof Error ? err.message : "spawn failed"}). ` +
+        `supracortex run: cannot launch "${bin}" (${err instanceof Error ? err.message : "spawn failed"}). ` +
           "Install OpenCode 1.x (https://opencode.ai) or set OPENCODE_BIN.",
       );
       settle(1);
@@ -1135,34 +1134,26 @@ function formatBytes(n: number): string {
 
 async function usage(): Promise<string> {
   return [
-    "supracode <command>",
-    "supracode run [--no-cortex] [-- <opencode args...>]  Launch SupraCode on OpenCode (bare `supracode` on a TTY does the same; --pi selects the parked Pi host)",
+    "supracortex <command>",
     "",
     "Commands:",
-    "  run [--no-cortex] [-- <opencode args>]  Launch SupraCode on OpenCode (server plugin + brand TUI)",
-    "  v2 [--no-cortex] [-- <v2 args>]      Launch SupraCode on the pinned OpenCode V2 host (aka supracode2)",
-    "  pi [--no-cortex] [-- <pi args>]       Launch SupraCode Pi (the Pi-based host; also the supracode-pi command)",
-    "  install [--global] [--force]       Install plugin into the current project",
+    "  install [--global] [--force]       Install the plugin into the current project",
     "  uninstall [--keep-data|--remove-data] [--global]",
-    "  provider [list|show|use <id>|check] Show or switch the decision provider (jev, laya-local, laya-hosted, custom)",
-    "  jev [status|key <KEY>|forget|login|test]  Jev decision model: show/set its OpenRouter key (or reuse your OpenCode OpenRouter login)",
-    "  connect <codex|claude|generic|all> Register SupraCortex as a global MCP server in Codex / Claude Code, or print a JSON snippet for any MCP host",
+    "  init [--yes] [--agent <name>]      Wire project MCP config and guidance",
+    "  connect <codex|claude|generic|all> Register SupraCortex as an MCP server",
     "  disconnect <codex|claude|all>      Remove that registration",
-    "  config [path|show|migrate [--yes]] Central config: show effective settings; strip stale per-project files",
-    "  profile [path|init|verify]         SupraCode's isolated OpenCode profile (verify = prove stock is untouched)",
-    "  migrate [--yes]                    Remove SupraCortex artifacts from stock ~/.config/opencode (dry run without --yes)",
     "  enable                             Persist enabled=true",
     "  disable                            Persist enabled=false",
-    "  status [--json] [--check-handshake]  Show status (handshake opt-in via --check-handshake)",
-    "  doctor [--fix] [--global]          Run health checks (--fix repairs the loader to relative npx)",
+    "  status [--json] [--check-handshake]  Show effective status",
+    "  doctor [--fix] [--global]          Run health checks",
     "  compact                            Compact memory",
     '  inspect "<query>"                  Explain what context would be prepared',
-    "  reset <target> --yes               Reset generated data (target: cache|index|sessions|metrics|all-generated|all)",
-    "  sync                               Unify memory with SupraSpace (.supraspace/*.md ingest + project)",
-    "  graph [--pretty]                   Export intelligence as a nodes/edges graph JSON (for SupraSpace)",
-    "  code-graph status|enable|disable|rebuild|query|path|explain|impact  Use the experimental local file/symbol graph",
-    '  context "<query>" [--agent <role>] Emit a prompt-injection context block for ANY CLI (universal)',
-    "  logs [--lines N]                   Show the tail of the latest Pi run log",
+    "  reset <target> --yes               Reset generated data (cache|index|sessions|metrics|all-generated|all)",
+    "  provider [list|show|use <id>|check] Decision provider configuration",
+    "  jev [status|key <KEY>|forget|login|test]  Jev decision model",
+    "  graph [--pretty]                   Export intelligence as a nodes/edges graph JSON",
+    "  code-graph status|enable|disable|rebuild|query|path|explain|impact  Local file/symbol graph",
+    '  context "<query>" [--agent <role>] Emit a prompt-injection context block for any CLI',
     "  version                            Print version",
   ].join("\n");
 }

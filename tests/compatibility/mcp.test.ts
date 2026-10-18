@@ -11,6 +11,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { createIdempotentCleanup, createMcpServer, runStdioMcp } from "../../src/mcp.ts";
 import { MAX_MCP_INPUT_CHARS, MCP_TOOL_NAMES, MCP_PROTOCOL_VERSION, OutputSchemas } from "../../src/protocol.ts";
+import { PACKAGE_VERSION } from "../../src/version.ts";
 
 /** Temp project. Features come from the (test-isolated) central config; a
  * project file can only carry the per-project kill switch. */
@@ -153,7 +154,7 @@ test("MCP: cortex_status reports protocol + package version even when disabled",
   const client = await connect(await makeProject(false));
   const payload = payloadOf(await client.callTool({ name: "cortex_status", arguments: {} }));
   assert.equal(payload.protocolVersion, MCP_PROTOCOL_VERSION);
-  assert.equal(payload.packageVersion, "0.2.0");
+  assert.equal(payload.packageVersion, PACKAGE_VERSION);
   assert.equal(typeof payload.enabled, "boolean");
   await client.close();
 });
