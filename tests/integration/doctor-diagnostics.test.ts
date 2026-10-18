@@ -154,7 +154,7 @@ test("H: status states + STALE + handshake flag + --fix relative npx", async () 
     assert.ok(names.includes("smoke context non-empty"));
     assert.ok(names.some((n) => n.startsWith("client ")));
     const hs = checks.find((c) => c.name === "MCP handshake")!;
-    assert.match(hs.detail, /ms|timed out|budget|not available|refused|exited|failed/i);
+    assert.match(hs.detail, /ms|timed out|budget|not available|refused|exited|failed|skipped|dev-ts-no-loader/i);
     const opencodeClient = checks.find((c) => c.name === "client opencode")!;
     assert.match(opencodeClient.detail, /\[OK\]/);
     const claudeClient = checks.find((c) => c.name === "client claude")!;

@@ -49,7 +49,7 @@ test("usage records keep provider costs, never invent them", () => {
     source: "main",
     provider: "",
     modelId: "",
-    usage: { input: -5, output: NaN },
+    usage: { input: -5, output: Number.NaN },
     complete: true,
   });
   assert.equal(unknown.cost, undefined, "absent cost is unknown, not zero-priced");

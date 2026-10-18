@@ -169,7 +169,7 @@ test("SQLite-backed value reports and usage deduplication use the storage contra
   const root = join(base, "project");
   await mkdir(root);
   await writeFile(join(root, "auth.ts"), "export const auth = true;");
-  let store;
+  let store: Awaited<ReturnType<typeof createSqliteStore>> | undefined;
   try {
     store = await createSqliteStore(join(root, ".supracortex"));
   } catch (error) {

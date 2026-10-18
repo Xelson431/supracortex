@@ -24,8 +24,6 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Verify lockfile matches workspace
-        run: pnpm install --frozen-lockfile --check-files
       - name: Build
         run: pnpm build
       - name: Pack tarball

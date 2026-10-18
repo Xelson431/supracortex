@@ -47,7 +47,8 @@ interface RunResult {
 
 function arg(name: string, fallback: string): string {
   const i = process.argv.indexOf(name);
-  return i >= 0 && process.argv[i + 1] ? process.argv[i + 1]! : fallback;
+  const value = process.argv[i + 1];
+  return i >= 0 && value ? value : fallback;
 }
 
 function runCmd(cmd: string, args: string[], cwd: string, timeoutMs: number): Promise<{ code: number; out: string; ms: number }> {
@@ -187,7 +188,11 @@ async function main(): Promise<void> {
   };
   for (let i = groups.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));
-    [groups[i], groups[j]] = [groups[j]!, groups[i]!];
+    const left = groups[i];
+    const right = groups[j];
+    if (!left || !right) continue;
+    groups[i] = right;
+    groups[j] = left;
   }
   const plan = groups.flat();
 
@@ -218,7 +223,7 @@ async function main(): Promise<void> {
       ms = r.ms;
     }
     const timedOut = ms >= timeoutMs;
-    const check = await runCmd(task.check[0]!, task.check.slice(1), work, 60000);
+    const check = await runCmd(task.check[0] ?? "", task.check.slice(1), work, 60000);
     const success = check.code === 0 && !timedOut;
     if (config === "raw-pi") {
       const s = parseJsonStream(out);
@@ -252,11 +257,11 @@ async function main(): Promise<void> {
       const wins = rows.filter((r) => r.success).length;
       const med = (nums: number[]): number | null => {
         const s = nums.filter((n) => Number.isFinite(n)).sort((a, b) => a - b);
-        return s.length ? s[Math.floor(s.length / 2)]! : null;
+        return s.length ? (s.at(Math.floor(s.length / 2)) ?? null) : null;
       };
       const costs = rows.filter((r) => r.success && r.providerCost !== null).map((r) => r.providerCost as number);
       lines.push(
-        `| ${config} | ${task.id} | ${rows.length} | ${wins}/${rows.length} | ${med(rows.map((r) => r.wallMs)) ?? "?"} | ${med(rows.map((r) => r.inputTokens ?? NaN)) ?? "?"}/${med(rows.map((r) => r.outputTokens ?? NaN)) ?? "?"} | ${costs.length ? (costs.reduce((a, b) => a + b, 0) / costs.length).toFixed(6) : "n/a"} |`,
+        `| ${config} | ${task.id} | ${rows.length} | ${wins}/${rows.length} | ${med(rows.map((r) => r.wallMs)) ?? "?"} | ${med(rows.map((r) => r.inputTokens ?? Number.NaN)) ?? "?"}/${med(rows.map((r) => r.outputTokens ?? Number.NaN)) ?? "?"} | ${costs.length ? (costs.reduce((a, b) => a + b, 0) / costs.length).toFixed(6) : "n/a"} |`,
       );
     }
   }

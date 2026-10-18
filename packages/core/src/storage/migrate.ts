@@ -49,7 +49,7 @@ async function collectSourceFiles(root: string): Promise<string[]> {
     }
     for (const name of names.sort()) {
       const abs = join(dir, name);
-      let stat;
+      let stat: Awaited<ReturnType<typeof lstat>>;
       try {
         stat = await lstat(abs);
       } catch {

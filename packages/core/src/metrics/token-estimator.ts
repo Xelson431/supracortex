@@ -120,7 +120,7 @@ export async function loadTiktokenESM(): Promise<TiktokenModule | null> {
     const mod = (await importer("js-tiktoken")) as TiktokenModule;
     if (mod && (mod.encodingForModel ?? mod.getEncoding)) tiktokenModule = mod;
   } catch {
-    tiktokenModule = tiktokenModule; // absent → labeled fallback, never throw
+    // Absent → labeled fallback, never throw.
   }
   return tiktokenModule;
 }

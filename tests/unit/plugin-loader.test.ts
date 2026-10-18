@@ -59,7 +59,10 @@ test("V2 install writes a generation-aware loader and local MCP server without r
     const loader = await readFile(join(root, ".opencode", "plugins", "supracortex.ts"), "utf8");
     const config = await readFile(join(root, "opencode.jsonc"), "utf8");
     assert.match(loader, /SUPRACODE_HOST_GENERATION === "v2"/);
-    assert.ok(loader.includes("opencode-v2.js"), `loader references V2 adapter: ${loader}`);
+    assert.ok(
+      loader.includes("opencode-v2.js") || loader.includes("plugin-v2.ts"),
+      `loader references V2 adapter: ${loader}`,
+    );
     assert.ok(loader.includes("plugin.ts"), `loader preserves V1 adapter path: ${loader}`);
     assert.match(config, /"type": "local"/);
     assert.match(config, /"environment"/);
@@ -95,7 +98,11 @@ test("install (source test context) writes a dual-generation loader pointing at 
       assert.ok(specUrl.startsWith("file://"), specUrl);
       assert.ok(await exists(fileURLToPath(specUrl)), `generated adapter path exists: ${specUrl}`);
     }
-    assert.ok(v1Match![1]!.endsWith("dist/opencode.js"));
+    assert.ok(
+      v1Match![1]!.endsWith("dist/opencode.js") ||
+        v1Match![1]!.endsWith("packages/opencode/src/plugin.ts"),
+      v1Match![1]!,
+    );
     assert.ok(
       v2Match![1]!.endsWith("packages/opencode/src/plugin-v2.ts") ||
         v2Match![1]!.endsWith("dist/opencode-v2.js"),
