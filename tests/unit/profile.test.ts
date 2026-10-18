@@ -38,7 +38,7 @@ test("supracodeEnv redirects only XDG_CONFIG_HOME and strips config-injecting va
     paths,
   );
   assert.equal(env.XDG_CONFIG_HOME, paths.farm);
-  assert.equal(env.SUPRACODE_REAL_XDG_CONFIG_HOME, "/h/.config");
+  assert.equal(env.SUPRACODE_REAL_XDG_CONFIG_HOME, join("/h", ".config"));
   assert.equal(env.XDG_DATA_HOME, "/d", "data dir (logins, sessions) stays shared");
   assert.equal(env.PATH, "/bin");
   for (const k of ["OPENCODE_CONFIG", "OPENCODE_CONFIG_DIR", "OPENCODE_CONFIG_CONTENT", "OPENCODE_TUI_CONFIG"]) {
@@ -49,7 +49,7 @@ test("supracodeEnv redirects only XDG_CONFIG_HOME and strips config-injecting va
 test("nested supracode keeps resolving the user's real config home", () => {
   const paths = profilePaths({ HOME: "/h", XDG_CONFIG_HOME: "/h/.local/state/supracode/xdg-config", SUPRACODE_REAL_XDG_CONFIG_HOME: "/h/.config" });
   assert.equal(paths.realConfigHome, "/h/.config");
-  assert.equal(paths.stockConfig, "/h/.config/opencode");
+  assert.equal(paths.stockConfig, join("/h/.config", "opencode"));
 });
 
 test("config farm links everything except opencode/supracode, and is idempotent", async () => {
@@ -95,7 +95,7 @@ test("ensureProfile copies providers WITHOUT inline credentials and nothing else
     assert.equal(cfg.provider.omniroute.options.baseURL, "http://localhost:1/v1");
     assert.equal("apiKey" in cfg.provider.omniroute.options, false, "no secret copied");
     assert.deepEqual(cfg.provider.omniroute.options.headers, { "X-Other": "1" });
-    assert.ok(r.created.some((p) => p.endsWith("plugins/supracortex.ts")));
+    assert.ok(r.created.some((p) => p.endsWith(join("plugins", "supracortex.ts"))));
     const tui = JSON.parse(await readFile(join(paths.opencodeConfig, "tui.json"), "utf8"));
     assert.deepEqual(tui.plugin, [BRAND]);
     // Second run: nothing rewritten, user edits to opencode.json preserved.

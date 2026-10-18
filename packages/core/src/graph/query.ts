@@ -11,8 +11,11 @@ export interface CodeGraphQueryResult {
 }
 
 function limits(input: CodeGraphQueryLimits = {}) {
+  // Default to two hops: a one-hop default returned only the selected file and
+  // its immediate children, which made a single-file query look truncated and
+  // hid the caller's direct dependents. Explicit maxDepth still wins.
   const bounded = (value: number | undefined, fallback: number, max: number) => Math.max(1, Math.min(max, Math.floor(value ?? fallback)));
-  return { depth: bounded(input.maxDepth, 1, CODE_GRAPH_LIMITS.maxQueryDepth), results: bounded(input.maxResults, CODE_GRAPH_LIMITS.maxQueryResults, CODE_GRAPH_LIMITS.maxQueryResults), fanout: bounded(input.maxFanout, CODE_GRAPH_LIMITS.maxQueryFanout, CODE_GRAPH_LIMITS.maxQueryFanout) };
+  return { depth: bounded(input.maxDepth, 2, CODE_GRAPH_LIMITS.maxQueryDepth), results: bounded(input.maxResults, CODE_GRAPH_LIMITS.maxQueryResults, CODE_GRAPH_LIMITS.maxQueryResults), fanout: bounded(input.maxFanout, CODE_GRAPH_LIMITS.maxQueryFanout, CODE_GRAPH_LIMITS.maxQueryFanout) };
 }
 
 interface GraphIndex {

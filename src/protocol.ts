@@ -102,7 +102,7 @@ export const SearchInputSchema = z.object({ query: z.string().min(1).max(8_000),
 const SourceReferenceSchema = z.object({ kind: z.enum(["file", "commit", "command", "external", "session"]), value: z.string().max(2_000), lines: z.tuple([z.number().int().nonnegative(), z.number().int().nonnegative()]).optional(), hash: z.string().max(500).optional(), note: z.string().max(2_000).optional() }).strict();
 const InvalidationRuleSchema = z.object({ kind: z.enum(["file-hash-changed", "file-deleted", "time-elapsed", "manual"]), target: z.string().max(500).optional(), expiresAt: z.string().max(100).optional() }).strict();
 /** The memory facet of cortex_record. Re-validated after the flat parse. */
-const MemoryRecordSchema = z.object({ type: z.literal("memory"), kind: z.enum(["fact", "decision", "convention", "failure", "constraint", "task-outcome"]), content: z.string().min(1).max(8_000), confidence: z.number().min(0).max(1).optional(), sourceReferences: z.array(SourceReferenceSchema).max(100).optional(), relatedFiles: z.array(z.string().max(500)).max(100).optional(), relatedSymbols: z.array(z.string().max(500)).max(100).optional(), tags: z.array(z.string().max(100)).max(50).optional(), invalidationRules: z.array(InvalidationRuleSchema).max(100).optional() }).strict();
+const MemoryRecordSchema = z.object({ type: z.literal("memory"), kind: z.enum(["fact", "decision", "convention", "failure", "constraint", "task-outcome"]), content: z.string().min(1).max(8_000), confidence: z.number().min(0).max(1).optional(), status: z.enum(["active", "candidate"]).optional().describe("candidate = submit for review; active = default when evidence is present"), sourceReferences: z.array(SourceReferenceSchema).max(100).optional(), relatedFiles: z.array(z.string().max(500)).max(100).optional(), relatedSymbols: z.array(z.string().max(500)).max(100).optional(), tags: z.array(z.string().max(100)).max(50).optional(), invalidationRules: z.array(InvalidationRuleSchema).max(100).optional() }).strict();
 /** The outcome facet of cortex_record. Re-validated after the flat parse. */
 const OutcomeRecordSchema = z.object({ type: z.literal("outcome"), operationId: z.string().min(1).max(120).optional(), taskId: z.string().min(1).max(500), status: z.enum(["success", "failure", "partial"]), summary: z.string().max(8_000), touchedFiles: z.array(z.string().max(500)).max(100), learnings: z.array(z.string().max(8_000)).max(50).optional(), failureReason: z.string().max(8_000).optional() }).strict();
 
@@ -135,6 +135,9 @@ export const RecordInputSchema = z.object({
   kind: MemoryRecordSchema.shape.kind.optional(),
   content: MemoryRecordSchema.shape.content.optional(),
   confidence: MemoryRecordSchema.shape.confidence.optional(),
+  // Shared by both facets but narrowed by the strict branch schema: memory
+  // accepts active/candidate, outcome accepts success/failure/partial.
+  status: z.enum(["success", "failure", "partial", "active", "candidate"]).optional().describe("Memory: candidate = submit for review; active = default when evidence is present. Outcome: success/failure/partial."),
   sourceReferences: MemoryRecordSchema.shape.sourceReferences.optional(),
   relatedFiles: MemoryRecordSchema.shape.relatedFiles.optional(),
   relatedSymbols: MemoryRecordSchema.shape.relatedSymbols.optional(),
@@ -143,7 +146,6 @@ export const RecordInputSchema = z.object({
   // outcome facet
   operationId: OutcomeRecordSchema.shape.operationId.optional(),
   taskId: OutcomeRecordSchema.shape.taskId.optional(),
-  status: OutcomeRecordSchema.shape.status.optional(),
   summary: OutcomeRecordSchema.shape.summary.optional(),
   touchedFiles: OutcomeRecordSchema.shape.touchedFiles.optional(),
   learnings: OutcomeRecordSchema.shape.learnings.optional(),

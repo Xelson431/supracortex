@@ -15,7 +15,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        node: ['22.6.0']
+        # pnpm 11.9 (installed via pnpm/action-setup) requires Node >= 22.13,
+        # so CI exercises that toolchain minimum. The package `engines` floor
+        # stays at >= 22.6 because the runtime still supports it.
+        node: ['22.13.0']
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

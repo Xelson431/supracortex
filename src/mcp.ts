@@ -324,12 +324,12 @@ export async function createMcpServer(projectRoot = process.env.SUPRACORTEX_ROOT
   // tools that create/update project memory state.
   const toolMeta: Record<string, { description: string; annotations?: Record<string, unknown> }> = {
     cortex_context: { description: `${BOOTSTRAP_SENTENCE} Prepare a bounded, explained context packet for a task: relevant memory, files, summaries, git changes, skill and MCP recommendations, and a token budget. Read-only; does not call a model.`, annotations: { readOnlyHint: true } },
-    cortex_search: { description: `${BOOTSTRAP_SENTENCE} Search persistent project memory (facts, decisions, conventions, failures, constraints) for entries relevant to a query. Returns ranked entries with reasons. Read-only.`, annotations: { readOnlyHint: true } },
-    cortex_record: { description: `${BOOTSTRAP_SENTENCE} Record a VERIFIED durable memory entry or task outcome. Durable facts/decisions/conventions/constraints require evidence (sourceReferences). Content is redacted for likely secrets. Write operation.` },
-    cortex_status: { description: `${BOOTSTRAP_SENTENCE} Report engine status, schema/protocol versions, and host capabilities. Read-only.`, annotations: { readOnlyHint: true } },
+    cortex_search: { description: "Search persistent project memory (facts, decisions, conventions, failures, constraints) for entries relevant to a query. Returns ranked entries with reasons. Read-only.", annotations: { readOnlyHint: true } },
+    cortex_record: { description: "Record a VERIFIED durable memory entry or task outcome. Durable facts/decisions/conventions/constraints require evidence (sourceReferences). Content is redacted for likely secrets. Write operation." },
+    cortex_status: { description: "Report engine status, schema/protocol versions, and host capabilities. Read-only.", annotations: { readOnlyHint: true } },
     cortex_timeline: { description: "Recall structural events (session/tool/task/file/test) within a bounded time window. Read-only.", annotations: { readOnlyHint: true } },
     cortex_detail: { description: "Show one structural event by ID. Read-only.", annotations: { readOnlyHint: true } },
-    cortex_handoff: { description: `${BOOTSTRAP_SENTENCE} Create a bounded project handoff capsule (project fingerprint, event watermark, approved evidence). Write operation.` },
+    cortex_handoff: { description: "Create a bounded project handoff capsule (project fingerprint, event watermark, approved evidence). Write operation." },
     cortex_resume: { description: "Resume a project handoff capsule by ID. Read-only retrieval of handoff state.", annotations: { readOnlyHint: true } },
     cortex_review: { description: "Review memory candidates: list, approve, edit, dispute, invalidate, pin, suppress, purge, or refresh-evidence (accept current file hashes without activating). Write operation (purge is destructive)." },
     cortex_safety: { description: "Generate an observed-evidence safety brief (changed files, secret risks, unresolved failures, stale evidence, open tasks). Read-only; never executes tests or shells.", annotations: { readOnlyHint: true } },
@@ -340,7 +340,7 @@ export async function createMcpServer(projectRoot = process.env.SUPRACORTEX_ROOT
     cortex_graph_explain: { description: "Explain one exact code-graph node and its provenance. Read-only.", annotations: { readOnlyHint: true } },
     cortex_graph_impact: { description: "Return bounded incoming or outgoing deterministic code dependencies for an exact selector. Read-only.", annotations: { readOnlyHint: true } },
     cortex_jev_status: { description: "Report the decision provider (Jev by default) and its health-gated state: active (used), checking, unreachable (with reason; deterministic fallback), no-key, or disabled. Read-only; never calls the network.", annotations: { readOnlyHint: true } },
-    cortex_jev_review: { description: `${BOOTSTRAP_SENTENCE} Ask the Jev decision model whether supplied task evidence warrants a review/handoff. Advisory only; falls back to no-recommendation when Jev is off or uncertain.`, annotations: { readOnlyHint: true } },
+    cortex_jev_review: { description: "Ask the Jev decision model whether supplied task evidence warrants a review/handoff. Advisory only; falls back to no-recommendation when Jev is off or uncertain.", annotations: { readOnlyHint: true } },
     cortex_capabilities: { description: "Report MCP/skill capability health observed this process: per-server availability (configured/connected/tested/failed with cooldown), tested tools, and which servers offer web search/fetch. Read-only; never calls the network.", annotations: { readOnlyHint: true } },
   };
   // Build outputSchema map from the same zod contracts. Advertised permissively:

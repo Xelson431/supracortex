@@ -78,9 +78,14 @@ export function buildMemoryEntry(input: NewMemoryInput, opts: BuildOptions): Bui
   const confidence = clamp01(input.confidence ?? 0.7);
   const kind = input.kind;
   const sources = (input.sourceReferences ?? []).slice(0, MAX_REF_ITEMS);
+  // An explicit `candidate` is a review submission: it may lack evidence and is
+  // never activated automatically. Only `active` durable entries (the default
+  // when status is omitted) must carry evidence.
+  const requestedStatus = input.status ?? "active";
 
   if (
     opts.requireEvidenceForDurableFacts &&
+    requestedStatus !== "candidate" &&
     DURABLE_KINDS.includes(kind) &&
     sources.length === 0
   ) {
@@ -165,7 +170,7 @@ export function buildMemoryEntry(input: NewMemoryInput, opts: BuildOptions): Bui
     confidence,
     // Preserve externally/agent-supplied assertions for review, but never let
     // an unverifiable source activate a durable claim automatically.
-    status: lacksVerifiableLocalEvidence ? "candidate" : (input.status ?? "active"),
+    status: lacksVerifiableLocalEvidence ? "candidate" : requestedStatus,
     sourceReferences: cleanSources,
     relatedFiles: cleanRelatedFiles,
     relatedSymbols: dedupe(input.relatedSymbols ?? []),

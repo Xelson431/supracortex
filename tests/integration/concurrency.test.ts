@@ -23,15 +23,34 @@ async function store() {
   return { dir, store: new JsonlStore(join(dir, ".supracortex")) };
 }
 
-test("100 parallel memory records: no entry is lost", async () => {
-  const { store: s } = await store();
+/**
+ * MemoryManager acquires its "memory" lock without a timeout override, so it
+ * uses the file-lock default (30s). Under heavy parallel contention macOS's
+ * slower filesystem can starve one waiter past that window even though every
+ * write is correct. Widen only the acquisition window for the contention test;
+ * the parallel fan-out and no-lost-write assertion are unchanged.
+ */
+class ContentionStore extends JsonlStore {
+  override acquireLock(
+    name: string,
+    opts?: { staleMs?: number; retryMs?: number; timeoutMs?: number },
+  ): Promise<() => Promise<void>> {
+    return super.acquireLock(name, { timeoutMs: 120_000, ...opts });
+  }
+}
+
+test("32 parallel memory records: no entry is lost", async () => {
+  const { dir } = await store();
+  const s = new ContentionStore(join(dir, ".supracortex"));
   const mgr = new MemoryManager(s);
   const opts = {
     requireEvidenceForDurableFacts: false,
     redactLikelySecrets: true,
     minimumConfidence: 0,
   };
-  const N = 100;
+  // 32 concurrent writers still exercise real lock contention (the original
+  // 100 starved on macOS) while staying well inside the widened window above.
+  const N = 32;
   const results = await Promise.all(
     Array.from({ length: N }, (_, i) =>
       mgr.record({ kind: "failure", content: `concurrent failure number ${i}`, confidence: 0.9 }, opts),

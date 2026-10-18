@@ -250,3 +250,77 @@ test("refresh-evidence refuses missing files without changing the entry", async 
     await engine.close();
   }
 });
+
+test("candidate memory is recorded without evidence, listed for review, and approved", async () => {
+  const { engine } = await setup();
+  try {
+    const rec = await engine.recordMemory({
+      kind: "fact",
+      content: "A user-submitted claim awaiting review with no evidence yet.",
+      confidence: 0.8,
+      status: "candidate",
+    });
+    assert.equal(rec.status, "recorded");
+    assert.ok(rec.entry);
+    const entry = rec.entry;
+    assert.equal(entry.status, "candidate");
+    assert.ok(
+      !entry.tags.includes("possible-contradiction"),
+      "explicit review submissions must not be tagged as heuristic contradictions",
+    );
+
+    const candidates = await engine.review({ type: "list" }) as MemoryEntry[];
+    const listed = candidates.find((e) => e.id === entry.id);
+    assert.ok(listed, "candidate must be reachable through the review queue");
+    assert.equal(listed.status, "candidate");
+
+    const approved = await engine.review({ type: "approve", id: entry.id }) as MemoryEntry;
+    assert.equal(approved.status, "active");
+    assert.equal((await reload(engine, entry.id)).status, "active");
+  } finally {
+    await engine.close();
+  }
+});
+
+test("durable fact without status or evidence is still rejected", async () => {
+  const { engine } = await setup();
+  try {
+    const rec = await engine.recordMemory({
+      kind: "fact",
+      content: "An unsupported claim that must not be recorded.",
+      confidence: 0.8,
+    });
+    assert.equal(rec.status, "rejected");
+    assert.match(rec.reason ?? "", /requires at least one sourceReference/);
+    assert.deepEqual(await engine.review({ type: "list" }), []);
+  } finally {
+    await engine.close();
+  }
+});
+
+test("record with evidence and no status is still active", async () => {
+  const { engine } = await setup();
+  try {
+    const entry = await recordFileFact(engine, "src/a.ts");
+    assert.equal(entry.status, "active");
+  } finally {
+    await engine.close();
+  }
+});
+
+test("status active without evidence cannot bypass the evidence gate", async () => {
+  const { engine } = await setup();
+  try {
+    const rec = await engine.recordMemory({
+      kind: "fact",
+      content: "An explicit active claim without any evidence.",
+      confidence: 0.8,
+      status: "active",
+    });
+    assert.equal(rec.status, "rejected");
+    assert.match(rec.reason ?? "", /requires at least one sourceReference/);
+    assert.deepEqual(await engine.review({ type: "list" }), []);
+  } finally {
+    await engine.close();
+  }
+});

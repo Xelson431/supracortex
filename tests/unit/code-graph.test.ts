@@ -117,6 +117,25 @@ test("neighbor traversal is cycle-safe and obeys result bounds", () => {
   assert.ok(result.nodes.length <= 2);
 });
 
+test("neighbor traversal defaults to two hops and honors explicit depth", () => {
+  const files: RepositoryIndex["files"] = {};
+  const chain = ["a", "b", "c", "d"];
+  chain.forEach((name, i) => {
+    const next = chain[i + 1];
+    files[`src/${name}.ts`] = {
+      path: `src/${name}.ts`, hash: String(i + 1).repeat(64), sizeBytes: 1, estimatedTokens: 1,
+      language: "typescript", symbols: [name], imports: next ? [`src/${next}`] : [], indexedAt: now, mtimeMs: 1,
+    };
+  });
+  const graph = buildCodeGraph({ index: { version: 2, root: "/not-exported", generatedAt: now, files }, projectFingerprint: fingerprint, generatedAt: now });
+  const byDefault = graphNeighbors(graph, "path:src/a.ts");
+  assert.ok(byDefault.nodes.some((node) => node.path === "src/c.ts"), "default query reaches two hops");
+  const explicitOne = graphNeighbors(graph, "path:src/a.ts", { maxDepth: 1 });
+  assert.ok(explicitOne.nodes.some((node) => node.path === "src/b.ts"), "explicit depth 1 reaches one hop");
+  assert.ok(!explicitOne.nodes.some((node) => node.path === "src/c.ts"), "explicit depth 1 stops at one hop");
+  assert.equal(explicitOne.truncated, true);
+});
+
 test("graph selectors reject ambiguous bare labels", () => {
   const graph = buildCodeGraph({ index: index(), projectFingerprint: fingerprint, generatedAt: now });
   assert.throws(() => graphNeighbors(graph, "alpha" as never), /selector/);

@@ -8,6 +8,60 @@
 
 import type { SkillExclusion, SkillMetadata, SkillRecommendation } from "../types.ts";
 
+// Skill matching is token-set based: connective/filler words must never
+// justify a recommendation (the old substring check made "in" match
+// "notfair-gemini"). This is the same intent as file-query filtering, kept
+// local so the skills module stays independent of the memory scorer.
+const SKILL_QUERY_STOPWORDS = new Set([
+  "a", "an", "and", "are", "as", "at", "be", "by", "did", "do", "does", "for",
+  "from", "get", "gets", "how", "i", "in", "into", "is", "it", "make", "makes",
+  "need", "needs", "of", "on", "or", "should", "that", "the", "this", "to",
+  "use", "used", "uses", "using", "was", "were", "what", "when", "where",
+  "which", "who", "why", "with", "work", "works", "would", "can", "could",
+]);
+
+// A skill must match at least one distinctive token. Structural names alone
+// ("app", "src", "page") cannot make an unrelated global skill relevant.
+const SKILL_GENERIC_TOKENS = new Set([
+  "app", "src", "lib", "components", "component", "pages", "page", "layout",
+  "routes", "route", "api", "index", "utils", "util", "hooks", "types",
+  "styles", "public", "static", "server", "client",
+]);
+
+const PREFIX_MATCH_WEIGHT = 0.5;
+const PREFIX_MATCH_MIN_LENGTH = 4;
+
+function splitTokens(text: string): string[] {
+  return text.toLocaleLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+}
+
+function queryTokenSet(tokens: readonly string[]): Set<string> {
+  const set = new Set<string>();
+  for (const token of tokens) {
+    for (const part of splitTokens(token)) {
+      if (!SKILL_QUERY_STOPWORDS.has(part)) set.add(part);
+    }
+  }
+  return set;
+}
+
+function matchesLeadingPrefix(a: string, b: string): boolean {
+  return (
+    a.length >= PREFIX_MATCH_MIN_LENGTH &&
+    b.length >= PREFIX_MATCH_MIN_LENGTH &&
+    a.slice(0, PREFIX_MATCH_MIN_LENGTH) === b.slice(0, PREFIX_MATCH_MIN_LENGTH)
+  );
+}
+
+/** 1 for a whole-token match, 0.5 for a conservative prefix, 0 otherwise. */
+function tokenMatchWeight(token: string, candidates: Set<string>): number {
+  if (candidates.has(token)) return 1;
+  for (const candidate of candidates) {
+    if (matchesLeadingPrefix(token, candidate)) return PREFIX_MATCH_WEIGHT;
+  }
+  return 0;
+}
+
 export interface SkillRecommendInput {
   skills: SkillMetadata[];
   queryTokens: string[];
@@ -31,12 +85,13 @@ export function recommendSkills(input: SkillRecommendInput): SkillRecommendResul
   const recommended: SkillRecommendation[] = [];
   const excluded: SkillExclusion[] = [];
   let duplicateLoadsAvoided = 0;
+  const query = queryTokenSet(input.queryTokens);
 
   const scored = input.skills
-    .map((s) => ({ skill: s, score: scoreSkill(s, input.queryTokens, input.targetAgent) }))
+    .map((s) => ({ skill: s, ...scoreSkill(s, query, input.targetAgent) }))
     .sort((a, b) => b.score - a.score);
 
-  for (const { skill, score } of scored) {
+  for (const { skill, score, matched } of scored) {
     // Agent compatibility gate.
     if (
       input.targetAgent &&
@@ -66,7 +121,7 @@ export function recommendSkills(input: SkillRecommendInput): SkillRecommendResul
 
     recommended.push({
       name: skill.name,
-      reason: buildReason(skill, input.queryTokens, score, already),
+      reason: buildReason(skill, matched, score, already),
       priority: round2(score),
       intendedAgent: input.targetAgent,
       needsLoad: !already,
@@ -81,29 +136,48 @@ export function recommendSkills(input: SkillRecommendInput): SkillRecommendResul
   };
 }
 
-function scoreSkill(skill: SkillMetadata, queryTokens: string[], agent?: string): number {
-  const hay = `${skill.name} ${skill.description} ${(skill.triggers ?? []).join(" ")}`.toLowerCase();
+function scoreSkill(
+  skill: SkillMetadata,
+  queryTokens: Set<string>,
+  agent?: string,
+): { score: number; matched: string[] } {
+  const hayTokens = new Set(
+    splitTokens(
+      `${skill.name} ${skill.description} ${(skill.triggers ?? []).join(" ")}`,
+    ),
+  );
+  const matched: string[] = [];
   let hits = 0;
-  for (const t of queryTokens) if (hay.includes(t)) hits++;
-  let score = queryTokens.length ? hits / queryTokens.length : 0;
+  let matchedNonGeneric = false;
+  for (const token of queryTokens) {
+    const weight = tokenMatchWeight(token, hayTokens);
+    if (weight === 0) continue;
+    matched.push(token);
+    hits += weight;
+    if (!SKILL_GENERIC_TOKENS.has(token)) matchedNonGeneric = true;
+  }
+  // Generic structural words alone cannot make an unrelated global skill
+  // relevant; require at least one distinctive token.
+  if (!matchedNonGeneric) return { score: 0, matched: [] };
+
+  let score = queryTokens.size ? hits / queryTokens.size : 0;
 
   // Explicit trigger match is a strong signal.
   for (const trig of skill.triggers ?? []) {
-    if (queryTokens.some((t) => trig.toLowerCase().includes(t))) score += 0.2;
+    const trigTokens = new Set(splitTokens(trig));
+    if ([...queryTokens].some((t) => tokenMatchWeight(t, trigTokens) > 0)) score += 0.2;
   }
   // Slight boost when the skill declares the target agent.
   if (agent && skill.compatibleAgents?.includes(agent)) score += 0.1;
-  return score;
+  return { score, matched: matched.slice(0, 3) };
 }
 
 function buildReason(
   skill: SkillMetadata,
-  queryTokens: string[],
+  matched: string[],
   score: number,
   already: boolean,
 ): string {
-  const hay = `${skill.name} ${skill.description}`.toLowerCase();
-  const matched = queryTokens.filter((t) => hay.includes(t)).slice(0, 3);
   const bits: string[] = [];
   if (matched.length) bits.push(`matches "${matched.join(", ")}"`);
   bits.push(`${skill.scope} skill`);

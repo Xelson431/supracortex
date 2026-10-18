@@ -25,9 +25,22 @@ const clean = (s: string, root?: string) => {
     text = text.replace(new RegExp(`(?<![A-Za-z0-9_])${rr.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")}(?=\\b|[/\\\\])`, "g"), ".");
   }
   return text.replace(/(?:[A-Za-z]:)?(?:[/\\][^\s"']+)+/g, (p) => {
+    // Project-root paths stay project-relative so diagnostics point at the
+    // relevant file without exposing the checkout location.
     if (root) { const r = relative(resolve(root), resolve(p)); if (r && !r.startsWith("..") && !isAbsolute(r)) return r; }
-    if (home && resolve(p).startsWith(resolve(home) + sep)) return "[REDACTED_PATH]";
-    return "[REDACTED_PATH]";
+    // HOME paths are abbreviated, not erased: `~/.config/supracortex/...`
+    // remains identifiable while hiding the account name.
+    if (home) {
+      const homeRoot = resolve(home);
+      const abs = resolve(p);
+      if (abs === homeRoot || abs.startsWith(homeRoot + sep)) {
+        const r = relative(homeRoot, abs);
+        return r ? `~/${r.split(sep).join("/")}` : "~";
+      }
+    }
+    // Other absolute paths are kept as-is. A placeholder made failures
+    // impossible to diagnose (which config/file actually failed?).
+    return p;
   });
 };
 const safeValue = (v: unknown, root: string): unknown => typeof v === "string" ? clean(v.replace(/sk-[A-Za-z0-9_-]+/g, "[REDACTED_SECRET]"), root) : Array.isArray(v) ? v.map(x => safeValue(x, root)) : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, safeValue(x, root)])) : v;

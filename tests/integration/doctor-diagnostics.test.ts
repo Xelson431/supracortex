@@ -85,12 +85,41 @@ test("D: JSONL tail is bounded and retains final records", async () => {
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
-test("G/I: sanitization removes sensitive paths and secrets while preserving enums", () => {
+test("G/I: sanitization removes secrets but keeps identifiable paths", () => {
   const root = "/tmp/project-sensitive"; const home = process.env.HOME ?? "/home/user";
+  const homeConfig = join(home, ".config", "supracortex", "config.jsonc");
   const secret = "sk-test-recognizable-secret";
-  const checks = sanitizeDiagnostics([{ id: "x", title: "X", status: "fail", evidence: "configured", detail: `${root} ${home} /opt/other ${secret}`, data: { nested: { path: root, token: secret } } }], root);
-  const text = JSON.stringify(checks); assert.ok(!text.includes(root) && !text.includes(home) && !text.includes("/opt/other") && !text.includes(secret));
+  const checks = sanitizeDiagnostics([{ id: "x", title: "X", status: "fail", evidence: "configured", detail: `${root}/src/a.ts ${homeConfig} /opt/other ${secret}`, data: { nested: { path: root, token: secret } } }], root);
+  const text = JSON.stringify(checks);
+  // Project-root paths stay project-relative; the account name in HOME paths is
+  // abbreviated; unrelated absolute paths remain diagnosable; secrets still go.
+  assert.ok(!text.includes(root), "project root is not exposed");
+  assert.ok(text.includes("./src/a.ts"), "project file remains identifiable");
+  assert.ok(text.includes("~/.config/supracortex/config.jsonc"), "HOME path renders as ~/...");
+  assert.ok(!text.includes(home), "account-specific HOME prefix is hidden");
+  assert.ok(text.includes("/opt/other"), "unrelated absolute path is preserved");
+  assert.ok(!text.includes(secret), "secret is redacted");
   assert.equal(checks[0]?.status, "fail"); assert.equal(checks[0]?.evidence, "configured"); assert.equal(checks[0]?.id, "x");
+});
+
+test("G/I: absolute paths outside HOME and the project root are preserved", () => {
+  if (process.platform === "win32") return; // Windows path shapes are covered elsewhere
+  const root = "/tmp/project-sensitive";
+  const outside = "/usr/local/bin/supracortex-mcp";
+  const checks = sanitizeDiagnostics([{ id: "x", title: "X", status: "fail", evidence: "unknown", detail: `launcher ${outside} failed`, data: {} }], root);
+  const detail = checks[0]?.detail ?? "";
+  assert.match(detail, /\/usr\/local\/bin\/supracortex-mcp/);
+  assert.doesNotMatch(detail, /REDACTED_PATH/);
+});
+
+test("only cortex_context carries the bootstrap sentence in MCP metadata", async () => {
+  const source = await readFile(resolve("src/mcp.ts"), "utf8");
+  const start = source.indexOf("const toolMeta");
+  const end = source.indexOf("// Build outputSchema", start);
+  assert.ok(start >= 0 && end > start, "tool metadata block found");
+  const entries = [...source.slice(start, end).matchAll(/^\s{4}(cortex_\w+): \{ description: (.*)$/gm)];
+  const bootstrapped = entries.filter(([, , line]) => line?.includes("BOOTSTRAP_SENTENCE")).map(([, name]) => name);
+  assert.deepEqual(bootstrapped, ["cortex_context"]);
 });
 
 test("F: doctor emits modern checks in text and JSON", async () => {

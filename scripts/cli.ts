@@ -92,12 +92,25 @@ function log(s: string): void {
   process.stdout.write(s + "\n");
 }
 
+/** Abbreviate only the HOME prefix; keep the rest of the path identifiable. */
+function displayError(message: string): string {
+  const home = process.env.HOME;
+  if (!home) return message;
+  const escaped = home.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return message.replace(new RegExp(`${escaped}(?=[/\\\\]|['"\\s]|$)`, "g"), "~");
+}
+
+/** `--help`/`-h` anywhere after the command name (including subcommands). */
+function wantsHelp(): boolean {
+  return process.argv.slice(3).some((arg) => arg === "--help" || arg === "-h");
+}
+
 async function main(): Promise<number> {
   const cmd = process.argv[2];
   const projectRoot = root();
 
   if (["install", "reinstall", "upgrade", "uninstall"].includes(cmd ?? "") || (cmd === "code-graph" && ["rebuild", "enable", "disable"].includes(process.argv[3] ?? ""))) {
-    if (has("--yes")) {
+    if (has("--yes") || wantsHelp()) {
       // Explicit acknowledgement is required only for mutation-capable commands.
     } else {
     log(`${cmd} is mutating and requires --yes`);
@@ -706,6 +719,7 @@ async function main(): Promise<number> {
     }
     case "code-graph": {
       const action = process.argv[3] ?? "status";
+      if (wantsHelp()) { log(await usage()); return 0; }
       const loaded = await loadConfig({ projectRoot, env: process.env });
       const engine = await createEngine({ config: loaded.config, projectRoot, worktree: projectRoot, pluginVersion: PLUGIN_VERSION });
       const limits = {
@@ -738,7 +752,7 @@ async function main(): Promise<number> {
         const selector = valueAfter("--selector"); const direction = valueAfter("--direction");
         if (!selector || (direction !== "incoming" && direction !== "outgoing")) { log("Usage: supracortex code-graph impact --selector <selector> --direction incoming|outgoing"); return 1; }
         result = await engine.queryCodeGraphImpact(selector as import("../packages/core/src/types.ts").CodeGraphSelector, direction, limits);
-      } else { log(`Unknown code-graph action: ${action}`); return 1; }
+      } else { log(`Unknown code-graph action: ${action}`); log(await usage()); return 1; }
       log(JSON.stringify(result, null, has("--pretty") ? 2 : 0));
       return 0;
     }
@@ -1161,6 +1175,6 @@ async function usage(): Promise<string> {
 main()
   .then((code) => process.exit(code))
   .catch((err) => {
-    process.stderr.write(`supracortex error: ${String((err as Error).message).replace(/(?:[A-Za-z]:)?(?:[\\/][^\s"']+)+/g, "[path]")}\n`);
+    process.stderr.write(`supracortex error: ${displayError(String((err as Error).message))}\n`);
     process.exit(2);
   });

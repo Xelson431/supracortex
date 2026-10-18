@@ -189,6 +189,10 @@ export function buildTools(rt: PluginRuntime): Record<string, ToolDefinition> {
         kind: z.enum(["fact", "decision", "convention", "failure", "constraint", "task-outcome"]),
         content: z.string(),
         confidence: z.number().min(0).max(1).optional(),
+        status: z
+          .enum(["active", "candidate"])
+          .optional()
+          .describe("candidate = submit for review; active = default when evidence is present"),
         sourceReferences: z
           .array(
             z.object({
@@ -209,6 +213,7 @@ export function buildTools(rt: PluginRuntime): Record<string, ToolDefinition> {
             kind: args.kind,
             content: args.content,
             confidence: args.confidence,
+            status: args.status,
             sourceReferences: toArrayOrUndefined(args.sourceReferences),
             relatedFiles: toOptionalStringArray(args.relatedFiles),
             tags: toOptionalStringArray(args.tags),

@@ -48,12 +48,20 @@ export async function resolveConfinedPath(
   if (typeof target !== "string" || target.includes("\0")) {
     throw new Error("path is outside project/storage root (null byte rejected)");
   }
-  // Windows-only absolute forms that POSIX `resolve` would misread as plain
-  // relative segments (drive `C:\…`/`C:/…`, UNC `\\host\…`, backslash-rooted
-  // `\…`). POSIX absolutes (`/…`) are NOT rejected here; they are confined
-  // by the relative()+escapes() check below. (win32.isAbsolute() must not be
-  // used: it returns true for every POSIX absolute path.)
-  if (/^[A-Za-z]:([\\/]|$)/.test(target) || /^\\\\/.test(target) || target.startsWith("\\")) {
+  // On POSIX, reject Windows absolute forms that `resolve` would misread as
+  // plain relative segments (drive `C:\…`/`C:/…`, UNC `\\host\…`,
+  // backslash-rooted `\…`). POSIX absolutes (`/…`) are NOT rejected here; they
+  // are confined by the relative()+escapes() check below. (win32.isAbsolute()
+  // must not be used: it returns true for every POSIX absolute path.)
+  //
+  // On Windows, callers pass already-resolved absolute targets (e.g.
+  // `resolve(root, rel)`), so rejecting drive/UNC forms here would reject every
+  // legitimate path. Containment is still enforced by relative()+escapes()
+  // below, which rejects `..` segments, cross-drive absolutes, and UNC targets.
+  if (
+    process.platform !== "win32" &&
+    (/^[A-Za-z]:([\\/]|$)/.test(target) || /^\\\\/.test(target) || target.startsWith("\\"))
+  ) {
     throw new Error("path is outside project/storage root (absolute/Windows escape rejected)");
   }
   const rel = relative(lexicalRoot, resolve(target));

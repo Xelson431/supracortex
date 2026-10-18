@@ -247,7 +247,35 @@ const FILE_QUERY_STOPWORDS = new Set([
   "it", "of", "on", "or", "that", "the", "this", "to", "which", "with",
   "find", "locate", "identify", "show", "where", "file", "files", "code",
   "repository", "repo", "project", "creates", "create", "related",
+  // Intent/filler words describe the task, not a repository path.
+  "how", "does", "do", "did", "work", "works", "use", "uses", "using", "used",
+  "can", "could", "should", "would", "what", "why", "when", "who", "need",
+  "needs", "get", "gets", "make", "makes",
 ]);
+
+/**
+ * Generic structural path names. They still match (30% of the normal path
+ * weight) so an explicit `src/app/layout.tsx` query keeps working, but they
+ * cannot dominate over a specific module name such as `auth`.
+ */
+const LOW_SIGNAL_PATH_TOKENS = new Set([
+  "app", "src", "lib", "components", "component", "pages", "page", "layout",
+  "routes", "route", "api", "index", "utils", "util", "hooks", "types",
+  "styles", "public", "static", "server", "client",
+]);
+
+const LOW_SIGNAL_PATH_WEIGHT = 0.3;
+const PREFIX_MATCH_WEIGHT = 0.5;
+const PREFIX_MATCH_MIN_LENGTH = 4;
+
+/** Conservative prefix match: both sides >= 4 chars and the same first 4. */
+function sharesLeadingPrefix(a: string, b: string): boolean {
+  return (
+    a.length >= PREFIX_MATCH_MIN_LENGTH &&
+    b.length >= PREFIX_MATCH_MIN_LENGTH &&
+    a.slice(0, PREFIX_MATCH_MIN_LENGTH) === b.slice(0, PREFIX_MATCH_MIN_LENGTH)
+  );
+}
 
 /** Terms that can actually justify a file match (shared with selection reasons). */
 export function fileQueryTokens(tokens: readonly string[]): string[] {
@@ -269,8 +297,32 @@ export function scoreFile(
   const queryTokens = fileQueryTokens(ctx.tokens);
   let lexical = 0;
   for (const t of queryTokens) {
-    if (pathTokens.has(t)) lexical += 1.2;
-    if (symbolTokens.has(t)) lexical += 1.0;
+    const pathExact = pathTokens.has(t);
+    const symbolExact = symbolTokens.has(t);
+    if (pathExact) {
+      lexical += 1.2 * (LOW_SIGNAL_PATH_TOKENS.has(t) ? LOW_SIGNAL_PATH_WEIGHT : 1);
+    }
+    if (symbolExact) lexical += 1.0;
+    // Only fall back to prefixes when there is no exact match at all, so a
+    // specific token never gets counted twice. Prefixes bridge inflections
+    // (auth ~ authentication) without matching unrelated roots.
+    if (!pathExact && !symbolExact && t.length >= PREFIX_MATCH_MIN_LENGTH) {
+      for (const p of pathTokens) {
+        if (sharesLeadingPrefix(t, p)) {
+          lexical +=
+            1.2 *
+            PREFIX_MATCH_WEIGHT *
+            (LOW_SIGNAL_PATH_TOKENS.has(p) ? LOW_SIGNAL_PATH_WEIGHT : 1);
+          break;
+        }
+      }
+      for (const s of symbolTokens) {
+        if (sharesLeadingPrefix(t, s)) {
+          lexical += 1.0 * PREFIX_MATCH_WEIGHT;
+          break;
+        }
+      }
+    }
   }
   const lexicalNorm = queryTokens.length ? lexical / (queryTokens.length * 1.2) : 0;
 

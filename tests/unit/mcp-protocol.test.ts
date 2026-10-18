@@ -485,7 +485,7 @@ test("MCP 6a: thin aliases resolve to canonical names", async () => {
   assert.equal(resolveCanonicalToolName("cortex_nope"), null);
 });
 
-test("MCP 6a: all 5 core descriptions start with the bootstrap sentence", async () => {
+test("MCP 6a: only cortex_context carries the bootstrap sentence", async () => {
   const { BOOTSTRAP_SENTENCE, CANONICAL_CORE_TOOLS } = await import("../../src/protocol.ts");
   const client = await connect(await makeProject(true));
   const { tools } = await client.listTools();
@@ -493,7 +493,11 @@ test("MCP 6a: all 5 core descriptions start with the bootstrap sentence", async 
   for (const name of CANONICAL_CORE_TOOLS) {
     const desc = byName.get(name);
     assert.ok(desc, `${name} must be advertised`);
-    assert.ok(desc.startsWith(BOOTSTRAP_SENTENCE), `${name} description must start with the bootstrap sentence`);
+    if (name === "cortex_context") {
+      assert.ok(desc.startsWith(BOOTSTRAP_SENTENCE), "cortex_context keeps the bootstrap sentence");
+    } else {
+      assert.ok(!desc.startsWith(BOOTSTRAP_SENTENCE), `${name} must not repeat the bootstrap sentence`);
+    }
   }
   await client.close();
 });

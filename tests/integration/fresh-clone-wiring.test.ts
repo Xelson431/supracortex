@@ -15,7 +15,7 @@
  */
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
-import { cp, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, realpath, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import test from "node:test";
@@ -67,11 +67,17 @@ test("fresh clone (no dist): wiring emits a runnable --experimental-strip-types 
     assert.equal(existsSync(join(clone.dir, "dist", "cli.js")), false, "temp copy must have no dist");
     const sourceEntry = join(clone.dir, "scripts", "cli.ts");
     assert.equal(existsSync(sourceEntry), true, "temp copy must have scripts/cli.ts");
+    // Node resolves the imported module through the filesystem's canonical
+    // path (macOS: /var/folders/... -> /private/var/folders/...), so the
+    // emitted args are canonical even though mkdtemp() hands us a symlinked
+    // form. Compare exact canonical paths on both sides rather than relaxing
+    // to a basename/substring match that could point at a different file.
+    const canonicalSourceEntry = await realpath(sourceEntry);
 
     // generic host: no throw, and the command must carry the strip-types flag.
     const snippet = await withoutShim(() => JSON.parse(clone.genericSnippet()).mcpServers.supracortex);
     assert.equal(snippet.type, "stdio");
-    assert.deepEqual(snippet.args, ["--experimental-strip-types", sourceEntry, "mcp"]);
+    assert.deepEqual(snippet.args, ["--experimental-strip-types", canonicalSourceEntry, "mcp"]);
     // The original bug was a bare `.ts` path with no flag.
     assert.equal(snippet.args[0], "--experimental-strip-types");
     assert.match(snippet.args[1], /cli\.ts$/);
@@ -81,7 +87,7 @@ test("fresh clone (no dist): wiring emits a runnable --experimental-strip-types 
     assert.equal(r.ok, true);
     const toml = await readFile(join(clone.dir, ".codex", "config.toml"), "utf8");
     assert.match(toml, /--experimental-strip-types/, "codex config carries the flag");
-    assert.ok(toml.includes(sourceEntry), "codex config points at scripts/cli.ts");
+    assert.ok(toml.includes(canonicalSourceEntry), "codex config points at scripts/cli.ts");
   } finally {
     await rm(clone.dir, { recursive: true, force: true });
   }
