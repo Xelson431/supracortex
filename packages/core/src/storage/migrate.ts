@@ -18,7 +18,7 @@
  */
 
 import { lstat, readdir } from "node:fs/promises";
-import { join, relative } from "node:path";
+import { join, relative, sep } from "node:path";
 import { JsonlStore } from "./jsonl-store.ts";
 import { createSqliteStore } from "./sqlite-store.ts";
 
@@ -62,7 +62,10 @@ async function collectSourceFiles(root: string): Promise<string[]> {
         continue;
       }
       if (!stat.isFile()) continue;
-      const rel = relative(root, abs);
+      // Store-facing logical keys are POSIX-separated on every platform (the
+      // SQLite driver and all readers use `events/events.jsonl`). `relative`
+      // yields `events\events.jsonl` on Windows, so normalize before use.
+      const rel = relative(root, abs).split(sep).join("/");
       if (rel === SQLITE_PREFIX || rel.startsWith(`${SQLITE_PREFIX}-`)) continue;
       if (name.endsWith(".json")) out.push(rel);
       else if (name.endsWith(".jsonl")) out.push(rel);

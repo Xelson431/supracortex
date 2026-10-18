@@ -21,7 +21,7 @@ jobs:
         node: ['22.13.0']
     env:
       # Node 22.13 still needs the flag to import .ts test entrypoints.
-      NODE_OPTIONS: --experimental-strip-types
+      NODE_OPTIONS: --experimental-strip-types --experimental-sqlite
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

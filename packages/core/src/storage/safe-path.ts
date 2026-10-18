@@ -114,7 +114,15 @@ export async function openRegularFile(path: string, flags: number): Promise<File
   const handle = await open(path, flags | (noFollow ?? 0) | (constants.O_NONBLOCK ?? 0), 0o600);
   try {
     const opened = await handle.stat();
-    if (!opened.isFile() || (before && (before.dev !== opened.dev || before.ino !== opened.ino))) {
+    // Windows does not expose stable/comparable dev+ino identity for the same
+    // file across lstat and fstat, so the swap check is POSIX-only. On Windows
+    // the pre-open lstat checks, the post-open isFile() check and the hard-link
+    // write check still apply, but a same-user rename race is not detectable.
+    const identityMatches =
+      process.platform === "win32" ||
+      !before ||
+      (before.dev === opened.dev && before.ino === opened.ino);
+    if (!opened.isFile() || !identityMatches) {
       throw new Error("file changed or is not a regular file");
     }
     if ((flags & (constants.O_WRONLY | constants.O_RDWR)) && opened.nlink > 1) {

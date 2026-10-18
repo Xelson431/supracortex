@@ -49,7 +49,11 @@ test("shares stock mcp/provider/skills; never plugin/agent/command/excluded skil
     assert.deepEqual(cfg.skills.paths, [sp.skillsDir]);
     assert.equal(readlinkSync(join(sp.skillsDir, "deepwork")), join(paths.stockConfig, "skills", "deepwork"));
     assert.equal(existsSync(join(sp.skillsDir, "supracortex")), false);
-    assert.equal((statSync(r.configFile).mode & 0o777).toString(8), "600", "may contain provider keys");
+    // Windows has no POSIX permission bits (mode reports 0o666); keep the
+    // strict check on platforms where it is meaningful.
+    if (process.platform !== "win32") {
+      assert.equal((statSync(r.configFile).mode & 0o777).toString(8), "600", "may contain provider keys");
+    }
   } finally {
     await rm(h, { recursive: true, force: true });
   }

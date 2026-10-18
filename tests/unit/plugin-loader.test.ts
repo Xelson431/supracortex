@@ -76,8 +76,9 @@ test("pluginEntrySpecFor: never resolves the bundled branch to plugin.ts", () =>
 });
 
 test("skillTemplatePathFor resolves the packaged skill from source and dist", () => {
-  assert.equal(cli.skillTemplatePathFor("/x/y/packages/opencode/src"), "/x/y/templates/skills/supracortex/SKILL.md");
-  assert.equal(cli.skillTemplatePathFor("/x/y/dist"), "/x/y/templates/skills/supracortex/SKILL.md");
+  const expected = join("/x/y", "templates", "skills", "supracortex", "SKILL.md");
+  assert.equal(cli.skillTemplatePathFor("/x/y/packages/opencode/src"), expected);
+  assert.equal(cli.skillTemplatePathFor("/x/y/dist"), expected);
 });
 
 test("install (source test context) writes a dual-generation loader pointing at real adapter bundles", async () => {

@@ -304,7 +304,16 @@ export interface MigrationReport {
 }
 
 async function backupFile(path: string, backupDir: string, report: MigrationReport): Promise<void> {
-  const dest = join(backupDir, path.replace(/^\/+/, "").replace(/\//g, "__"));
+  // Flatten the source path into one filename. On Windows the absolute path is
+  // `C:\Users\...\file`, so strip the drive and leading separators and replace
+  // BOTH separator styles with `__`; otherwise `join` would produce nested
+  // parents that `mkdir(backupDir)` never created. Full relative segments stay
+  // in the name, preserving uniqueness.
+  const flattened = path
+    .replace(/^[A-Za-z]:/, "")
+    .replace(/^[\\/]+/, "")
+    .replace(/[\\/]/g, "__");
+  const dest = join(backupDir, flattened);
   await mkdir(backupDir, { recursive: true });
   await copyFile(path, dest);
   report.backups.push(dest);
