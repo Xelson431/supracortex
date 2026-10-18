@@ -6,6 +6,7 @@ import test from "node:test";
 import {
   type FootprintFs,
   type FootprintReport,
+  clean,
   computeStorageFootprint,
   footprintCheck,
   runDiagnostics,
@@ -204,4 +205,52 @@ test("computeStorageFootprint tolerates statfs failure and degrades to fs:null, 
   assert.equal(d.fs, null);
   // Size stays informational even with bytes present.
   assert.equal(d.totalBytes, 4096);
+});
+
+// ---------------------------------------------------------------------------
+// Windows roots: clean() must never build a RegExp from the path.
+// Before the fix a root ending in `\` produced `D:\(?=...)` and threw
+// "Invalid regular expression ... Unmatched ')'".
+// ---------------------------------------------------------------------------
+
+test("clean handles Windows-style roots without building a RegExp from the path", () => {
+  const driveRoot = `${String.raw`D:`}\\`; // String.raw`D:\` is not expressible directly
+  const nestedRoot = String.raw`D:\a\repo`;
+  const trailingRoot = `${nestedRoot}\\`;
+  const metaRoot = String.raw`C:\a.b(c)\repo`;
+
+  const cases: Array<[text: string, root: string, expected: string]> = [
+    [String.raw`D:\src\a.ts`, driveRoot, "./src/a.ts"],
+    [String.raw`D:\a\repo\src\b.ts`, nestedRoot, "./src/b.ts"],
+    [String.raw`D:\a\repo\src\c.ts`, trailingRoot, "./src/c.ts"],
+    [String.raw`C:\a.b(c)\repo\src\d.ts`, metaRoot, "./src/d.ts"],
+  ];
+  for (const [text, root, expected] of cases) {
+    assert.doesNotThrow(() => clean(text, root), `root ${JSON.stringify(root)}`);
+    assert.equal(clean(text, root), expected);
+  }
+});
+
+test("clean does not replace a root that is only a prefix of another path", () => {
+  // /project must not eat the leading segment of /project2.
+  assert.equal(clean("/project2/src/a.ts", "/project"), "/project2/src/a.ts");
+});
+
+test("footprintCheck renders Windows-style subdir paths project-relative", async () => {
+  const { dirs, sizes, fs } = fakeFs();
+  const root = String.raw`D:\a\repo`;
+  const storage = String.raw`D:\a\repo\.supracortex`;
+  const winSubdir = String.raw`D:\a\repo\metrics`;
+  const winFile = join(storage, winSubdir, "events.jsonl");
+  dirs.set(storage, [winSubdir]);
+  dirs.set(join(storage, winSubdir), ["events.jsonl"]);
+  sizes.set(winFile, 128);
+
+  const report = await computeStorageFootprint(storage, fs);
+  assert.equal(report.totalBytes, 128);
+
+  const check = await footprintCheck(storage, root, fs);
+  assert.equal(check.status, "pass");
+  assert.ok(check.detail.includes("./metrics=128"), check.detail);
+  assert.ok(!check.detail.includes(root), "project root is not leaked");
 });

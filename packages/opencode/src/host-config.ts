@@ -457,7 +457,15 @@ export async function stageConfigEdits(
     // Backup original to stage dir.
     let backupPath: string | null = null;
     if (originalContent !== null) {
-      const backupName = `backup-${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${relative(target.root, target.file).replace(/\//g, "_")}`;
+      // `relative()` uses the host separator: on Windows it returns
+      // `..\..\.cursor\mcp.json` (or an absolute `D:\...` path across drives).
+      // Flatten both separators plus any drive colon so backupName is a single
+      // filename directly under stageDir; otherwise writeFile would try to
+      // create nested directories that do not exist and fail with ENOENT.
+      const relativeTarget = relative(target.root, target.file)
+        .replace(/[\\/:]+/g, "_")
+        .replace(/^_+|_+$/g, "") || "target";
+      const backupName = `backup-${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${relativeTarget}`;
       backupPath = join(stageDir, backupName);
       await writeFile(backupPath, originalContent, "utf8");
     }

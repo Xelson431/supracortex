@@ -19,7 +19,7 @@ import test from "node:test";
 import assert from "node:assert";
 import { mkdtemp, mkdir, readFile, writeFile, rm, symlink, chmod } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { createHash } from "node:crypto";
 import {
   stageConfigEdits,
@@ -610,6 +610,56 @@ test("assertPathConfined rejects paths escaping root", () => {
 
 test("assertPathConfined rejects NUL bytes", () => {
   assert.throws(() => assertPathConfined("/proj", "/proj/\0bad", "test"), /NUL/i);
+});
+
+// ---------------------------------------------------------------------------
+// 18. Backup filename flattening (Windows separators)
+// ---------------------------------------------------------------------------
+
+test("staged backup is a direct child of the stage dir for a nested target", async () => {
+  const root = await tempProject();
+  // On Windows relative() returns `.cursor\mcp.json`, which previously made
+  // writeFile try to create the nested `.cursor` directory under stageDir.
+  const target = makeTarget(root, ".cursor/mcp.json");
+  await mkdir(dirname(target.file), { recursive: true });
+  await writeFile(target.file, JSON.stringify({ mcpServers: {} }), "utf8");
+
+  const stage = await stageDir(root);
+  const edits = await stageConfigEdits(stage, { targets: [target] });
+  const backup = edits[0]?.backupPath;
+  assert.ok(backup, "backup written");
+  assert.equal(dirname(backup), stage, "backup lives directly in the stage dir");
+  assert.equal(basename(backup).includes("\\"), false, "no backslash separators");
+  assert.equal(basename(backup).includes("/"), false, "no slash separators");
+});
+
+test("staged backup flattens Windows-style relative paths and drive colons", async () => {
+  // On POSIX a backslash is a legal filename character, so these paths stay
+  // inside `root`. They mimic what relative() returns for an outside-root
+  // target (`..\..\.cursor\mcp.json`) and across drives (`D:\Users\...`),
+  // letting us exercise Windows flattening on Linux. On Windows the paths are
+  // real separators and would escape the confinement check, so reinstallation
+  // coverage is provided by the nested-target test above.
+  if (process.platform === "win32") return;
+  const root = await tempProject();
+  const targets = [
+    makeTarget(root, String.raw`..\..\.cursor\mcp.json`),
+    makeTarget(root, String.raw`D:\Users\me\.cursor\mcp.json`),
+  ];
+  for (const target of targets) {
+    await writeFile(target.file, JSON.stringify({ mcpServers: {} }), "utf8");
+  }
+
+  const stage = await stageDir(root);
+  const edits = await stageConfigEdits(stage, { targets });
+  assert.equal(edits.length, 2);
+  for (const edit of edits) {
+    const backup = edit.backupPath;
+    assert.ok(backup, "backup written");
+    assert.equal(dirname(backup), stage, "backup lives directly in the stage dir");
+    const name = basename(backup);
+    assert.equal(/[\\/:]/.test(name), false, `flattened filename: ${name}`);
+  }
 });
 
 // ---------------------------------------------------------------------------

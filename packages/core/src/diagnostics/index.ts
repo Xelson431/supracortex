@@ -17,13 +17,49 @@ const CAP = 2000;
 /** Deliberately bounded: enough for large JSONL records while making status/doctor I/O finite. */
 export const TAIL_BYTE_CAP = 4 * 1024 * 1024;
 const errno = (e: unknown) => e as NodeJS.ErrnoException;
-const clean = (s: string, root?: string) => {
+const isWordChar = (ch: string) => /[A-Za-z0-9_]/.test(ch);
+
+/**
+ * Replace occurrences of the exact project root with ".". Never builds a
+ * RegExp from the path: Windows roots contain backslashes and may contain
+ * regex metacharacters, so interpolation produced invalid or over-broad
+ * patterns (e.g. `D:\` -> unmatched ')'). Diagnostics are display-only, so
+ * normalizing separators to "/" here is safe and lets one scan cover both
+ * Windows and POSIX roots.
+ */
+function replaceProjectRoot(value: string, root: string): string {
+  const resolved = isAbsolute(root) ? resolve(root) : root;
+  const needle = resolved.replace(/\\/g, "/").replace(/\/+$/, "");
+  // A filesystem root ("/") is a prefix of everything; leave it alone rather
+  // than turning every separator into a dot.
+  if (!needle || needle === "/") return value;
+  const text = value.replace(/\\/g, "/");
+  const last = needle[needle.length - 1] as string;
+  let out = "";
+  let from = 0;
+  for (;;) {
+    const at = text.indexOf(needle, from);
+    if (at < 0) return out + text.slice(from);
+    const before = at === 0 ? "" : (text[at - 1] as string);
+    const after = (text[at + needle.length] ?? "") as string;
+    const startsAtBoundary = before === "" || !isWordChar(before);
+    // A trailing separator, end of string, or a real \b word boundary.
+    const endsAtBoundary =
+      after === "" || after === "/" || isWordChar(last) !== isWordChar(after);
+    if (startsAtBoundary && endsAtBoundary) {
+      out += `${text.slice(from, at)}.`;
+    } else {
+      // Keep non-matching occurrences verbatim (e.g. /project2 vs /project).
+      out += text.slice(from, at + needle.length);
+    }
+    from = at + needle.length;
+  }
+}
+
+export const clean = (s: string, root?: string) => {
   let text = redactSecrets(s).text;
   const home = process.env.HOME;
-  if (root) {
-    const rr = resolve(root);
-    text = text.replace(new RegExp(`(?<![A-Za-z0-9_])${rr.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")}(?=\\b|[/\\\\])`, "g"), ".");
-  }
+  if (root) text = replaceProjectRoot(text, root);
   return text.replace(/(?:[A-Za-z]:)?(?:[/\\][^\s"']+)+/g, (p) => {
     // Project-root paths stay project-relative so diagnostics point at the
     // relevant file without exposing the checkout location.
