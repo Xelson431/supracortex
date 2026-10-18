@@ -72,7 +72,12 @@ test("removes dead-owner locks silently, keeps live ones, ignores foreign dirs",
   assert.equal(existsSync(join(state, "random.lock")), true);
 });
 
-test("collects a recycled-PID lock (owner dead, pid reused by a live process)", async () => {
+// Recycled-PID detection relies on `ps -o etime` / /proc start times, which are
+// POSIX (Linux-verified) semantics. Windows has neither, so skip rather than
+// claim Windows coverage; the dead-owner and live-owner cases still run there.
+test("collects a recycled-PID lock (owner dead, pid reused by a live process)", {
+  skip: process.platform === "win32" ? "recycled-PID detection is POSIX-verified only" : false,
+}, async () => {
   const state = await stateDir();
   await plant(state, LOCK, {
     pid: process.pid,

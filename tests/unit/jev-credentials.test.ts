@@ -43,8 +43,8 @@ test("login reader ignores oauth entries, malformed files and missing keys", asy
     await writeFile(f, "{ nope");
     assert.equal(readOpencodeLogin("openrouter", f), undefined);
     assert.equal(readOpencodeLogin("openrouter", join(d, "missing.json")), undefined);
-    assert.equal(opencodeAuthFile({ XDG_DATA_HOME: "/x" }), "/x/opencode/auth.json");
-    assert.equal(opencodeAuthFile({ HOME: "/h" }), "/h/.local/share/opencode/auth.json");
+    assert.equal(opencodeAuthFile({ XDG_DATA_HOME: "/x" }), join("/x", "opencode", "auth.json"));
+    assert.equal(opencodeAuthFile({ HOME: "/h" }), join("/h", ".local", "share", "opencode", "auth.json"));
   } finally {
     await rm(d, { recursive: true, force: true });
   }
@@ -55,7 +55,11 @@ test("writeCredential: mode 600, replaces only its own line; removeCredential un
   try {
     await writeFile(join(d, "openrouter.env"), "# note\nOTHER=keep\nexport OPENROUTER_API_KEY=old\n");
     const path = writeCredential("OPENROUTER_API_KEY", "sk-or-v1-new", { userDir: d });
-    assert.equal((statSync(path).mode & 0o777).toString(8), "600");
+    // Windows has no POSIX permission bits; chmod is a no-op there. Keep the
+    // strict mode assertion on POSIX without weakening it.
+    if (process.platform !== "win32") {
+      assert.equal((statSync(path).mode & 0o777).toString(8), "600");
+    }
     const text = readFileSync(path, "utf8");
     assert.match(text, /OTHER=keep/);
     assert.match(text, /^OPENROUTER_API_KEY=sk-or-v1-new$/m);

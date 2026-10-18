@@ -53,7 +53,19 @@ test("runPi launches fullscreen by default and preserves explicit TUI mode", () 
   assert.equal(seen.length, 1);
   const call = seen[0]!;
   assert.equal(call.cmd, process.execPath);
-  assert.deepEqual(call.args, ["/pkg/dist/bundle/cli.js", "-e", "/pkg/dist/pi-extension.js", "--tui-mode", "fullscreen", "--mcp-config", "/home/test/.pi/agent/mcp.json", "-p", "hi"]);
+  // binPath/extensionPath are passed through verbatim; only the derived agent
+  // dir is built with `join`, so normalize just that segment per platform.
+  assert.deepEqual(call.args, [
+    "/pkg/dist/bundle/cli.js",
+    "-e",
+    "/pkg/dist/pi-extension.js",
+    "--tui-mode",
+    "fullscreen",
+    "--mcp-config",
+    join("/home/test", ".pi", "agent", "mcp.json"),
+    "-p",
+    "hi",
+  ]);
   assert.equal((call.opts as { shell: boolean }).shell, false);
   runPi(bin, { piArgs: ["--tui-mode", "regular"], spawnImpl: fakeSpawn });
   assert.deepEqual(seen[1]!.args, ["/pkg/dist/bundle/cli.js", "--mcp-config", join(process.env.HOME ?? process.env.USERPROFILE ?? ".", ".pi", "agent", "mcp.json"), "--tui-mode", "regular"]);

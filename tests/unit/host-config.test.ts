@@ -19,7 +19,7 @@ import test from "node:test";
 import assert from "node:assert";
 import { mkdtemp, mkdir, readFile, writeFile, rm, symlink, chmod } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { createHash } from "node:crypto";
 import {
   stageConfigEdits,
@@ -140,7 +140,7 @@ test("JSONC: preserves comments and trailing commas in existing config", async (
 test("concurrent user edit between stage and commit aborts and rolls back", async () => {
   const root = await tempProject();
   const target = makeTarget(root, ".cursor/mcp.json");
-  await mkdir(dir(target.file));
+  await mkdir(dirname(target.file), { recursive: true });
   await writeFile(target.file, JSON.stringify({ mcpServers: {} }), "utf8");
 
   const stage = await stageDir(root);
@@ -197,7 +197,7 @@ test("interrupted multi-file install rolls back all files", async () => {
     makeTomlTarget(root, ".codex/config.toml"),
   ];
   for (const t of targets) {
-    await mkdir(dir(t.file), { recursive: true });
+    await mkdir(dirname(t.file), { recursive: true });
     await writeFile(t.file, t.format === "toml" ? "# original\n" : JSON.stringify({ mcpServers: {} }) + "\n", "utf8");
   }
 
@@ -275,7 +275,7 @@ test("isPathInManifestRoots rejects paths outside permitted roots", () => {
 test("symlink target within root is lexically confined (deeper symlink checking in agent-wiring)", async () => {
   const root = await tempProject();
   const linkPath = join(root, "subdir", "config.json");
-  await mkdir(dir(linkPath), { recursive: true });
+  await mkdir(dirname(linkPath), { recursive: true });
 
   // assertPathConfined checks lexical path, not resolved symlinks.
   // The deeper symlink-and-realpath checking lives in agent-wiring.ts assertInstallerPathConfined.
@@ -338,7 +338,7 @@ test("uninstall refuses to remove file with custom (non-owned) content", async (
 test("repeat install is idempotent (no changes on second run)", async () => {
   const root = await tempProject();
   const target = makeTarget(root, ".cursor/mcp.json");
-  await mkdir(dir(target.file));
+  await mkdir(dirname(target.file), { recursive: true });
   await writeFile(target.file, JSON.stringify({ mcpServers: {} }), "utf8");
 
   // First install.
@@ -367,7 +367,7 @@ test("repeat install is idempotent (no changes on second run)", async () => {
 test("force reinstall can skip unchanged check", async () => {
   const root = await tempProject();
   const target = makeTarget(root, ".cursor/mcp.json");
-  await mkdir(dir(target.file));
+  await mkdir(dirname(target.file), { recursive: true });
   await writeFile(target.file, JSON.stringify({ mcpServers: {} }), "utf8");
 
   // First install.
@@ -433,7 +433,7 @@ test("uninstall happy path: hash matches → surgical removal", async () => {
   const target = makeTarget(root, ".cursor/mcp.json");
   // Use custom server name to verify surgical removal from existing JSON.
   const customTarget: ConfigTarget = { ...target, serverName: "supracortex" };
-  await mkdir(dir(customTarget.file));
+  await mkdir(dirname(customTarget.file), { recursive: true });
   await writeFile(customTarget.file, JSON.stringify({
     mcpServers: {
       userTool: { type: "stdio", command: "other" },
@@ -613,14 +613,8 @@ test("assertPathConfined rejects NUL bytes", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 18. dir helper (dirname that works for test paths)
+// Cleanup
 // ---------------------------------------------------------------------------
-
-function dir(p: string): string {
-  const lastSlash = p.lastIndexOf("/");
-  if (lastSlash === -1) return ".";
-  return p.slice(0, lastSlash);
-}
 
 // Clean up temp dirs after all tests.
 test.after(async () => {
