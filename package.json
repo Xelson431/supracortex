@@ -98,7 +98,6 @@
   ],
   "publishConfig": {
     "access": "public",
-    "provenance": true,
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
@@ -123,6 +122,8 @@
     "@opencode-ai/plugin": "1.18.32"
   },
   "peerDependenciesMeta": {
-    "@opencode-ai/plugin": { "optional": true }
+    "@opencode-ai/plugin": {
+      "optional": true
+    }
   }
 }
