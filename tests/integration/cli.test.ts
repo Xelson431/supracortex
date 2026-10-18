@@ -27,7 +27,8 @@ test("install creates expected files and is idempotent", async () => {
   // Settings are central: a project install must NOT write a project config.
   assert.ok(!r1.created.some((p) => p.endsWith(join(".supracortex", "config.jsonc"))));
   assert.equal(await exists(join(dir, ".supracortex", "config.jsonc")), false);
-  assert.ok(r1.created.some((p) => p.includes(".opencode/plugins")));
+  // Normalize separators: Windows reports created paths with `\`.
+  assert.ok(r1.created.some((p) => p.replaceAll("\\", "/").includes(".opencode/plugins")));
   const skill = join(dir, ".opencode", "skills", "supracortex", "SKILL.md");
   assert.ok(await exists(skill));
   assert.match(await readFile(skill, "utf8"), /cortex_context/);

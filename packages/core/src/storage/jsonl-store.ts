@@ -184,7 +184,7 @@ export class JsonlStore implements StorageAdapter {
       await handle.writeFile(content, "utf8");
       await handle.close();
       if (await this.resolveSafe(relPath) !== abs) throw new Error("storage path changed during write");
-      await rename(tmp, abs);
+      await renameWithRetry(tmp, abs);
     } finally {
       await handle.close().catch(() => undefined);
       await rm(tmp, { force: true });
@@ -209,6 +209,30 @@ export class JsonlStore implements StorageAdapter {
 
   async rewriteHistory(relPath: string, entries: unknown[]): Promise<void> {
     return this.rewriteJsonl(relPath, entries);
+  }
+}
+
+/**
+ * Windows can transiently reject a rename that replaces an existing file when
+ * another process (indexer, antivirus) still holds the target open. Retry only
+ * those sharing/permission codes with a short bounded backoff; every other
+ * error is rethrown unchanged.
+ */
+const RENAME_RETRY_CODES = new Set(["EPERM", "EACCES", "EBUSY"]);
+const RENAME_RETRY_DELAYS_MS = [25, 25, 25, 25, 25, 25, 25, 25, 25, 25];
+
+async function renameWithRetry(from: string, to: string): Promise<void> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      await rename(from, to);
+      return;
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (!code || !RENAME_RETRY_CODES.has(code) || attempt >= RENAME_RETRY_DELAYS_MS.length) {
+        throw error;
+      }
+      await new Promise((resolve) => setTimeout(resolve, RENAME_RETRY_DELAYS_MS[attempt]!));
+    }
   }
 }
 

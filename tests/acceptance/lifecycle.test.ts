@@ -173,7 +173,9 @@ test("uninstall after heavy use leaves host config + source pristine, keeps data
   const srcBefore = await readFile(join(dir, "src/auth.ts"), "utf8");
 
   const r = await cli.uninstall({ projectRoot: dir, keepData: true });
-  assert.ok(r.removed.some((p) => p.includes("plugins/supracortex.ts")));
+  // Windows reports separators as `\`; normalize collected paths before the
+  // logical-path assertion.
+  assert.ok(r.removed.some((p) => p.replaceAll("\\", "/").includes("plugins/supracortex.ts")));
   assert.equal(await readFile(join(dir, "opencode.json"), "utf8"), configBefore, "opencode.json pristine");
   assert.equal(await readFile(join(dir, "src/auth.ts"), "utf8"), srcBefore, "source pristine");
   assert.ok(await exists(join(dir, ".supracortex")), "data kept");

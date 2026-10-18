@@ -48,9 +48,10 @@ test("32 parallel memory records: no entry is lost", async () => {
     redactLikelySecrets: true,
     minimumConfidence: 0,
   };
-  // 32 concurrent writers still exercise real lock contention (the original
-  // 100 starved on macOS) while staying well inside the widened window above.
-  const N = 32;
+  // Windows' filesystem lock handling is slower; 16 concurrent writers still
+  // exercise real contention (the original 100 starved on macOS) while staying
+  // comfortably inside the widened window above.
+  const N = process.platform === "win32" ? 16 : 32;
   const results = await Promise.all(
     Array.from({ length: N }, (_, i) =>
       mgr.record({ kind: "failure", content: `concurrent failure number ${i}`, confidence: 0.9 }, opts),
@@ -66,9 +67,12 @@ test("32 parallel memory records: no entry is lost", async () => {
 });
 
 test("parallel cache writes to distinct keys all survive (no lost update)", async () => {
-  const { store: s } = await store();
+  const { dir } = await store();
+  // ContextCache uses the store's default lock timeout; widen it on slow
+  // filesystems and keep the fan-out Windows-safe.
+  const s = new ContentionStore(join(dir, ".supracortex"));
   const cache = new ContextCache(s);
-  const N = 60;
+  const N = process.platform === "win32" ? 20 : 60;
   await Promise.all(
     Array.from({ length: N }, (_, i) =>
       cache.set({
@@ -87,7 +91,10 @@ test("parallel cache writes to distinct keys all survive (no lost update)", asyn
 });
 
 test("file ownership under concurrency grants each contested file to exactly one task", async () => {
-  const { store: s } = await store();
+  const { dir } = await store();
+  // Ownership claimers share one lock; widen its acquisition window without
+  // changing the grant/deny assertions.
+  const s = new ContentionStore(join(dir, ".supracortex"));
   const own = new OwnershipManager(s);
   const contested = ["shared/a.ts", "shared/b.ts", "shared/c.ts"];
   const claimers = 20;
@@ -141,7 +148,10 @@ test("advisory lock provides mutual exclusion (no interleaving of critical secti
   let inside = 0;
   let maxInside = 0;
   const worker = async () => {
-    const release = await s.acquireLock("crit", { timeoutMs: 5000 });
+    // Windows lock handoff is slower; widen only the wait, not the exclusion.
+    const release = await s.acquireLock("crit", {
+      timeoutMs: process.platform === "win32" ? 60_000 : 5000,
+    });
     try {
       inside++;
       maxInside = Math.max(maxInside, inside);

@@ -26,7 +26,7 @@ import { readFileSync, writeFileSync, mkdirSync, readdirSync } from "node:fs";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -608,13 +608,15 @@ export async function evaluate(
 
   // Build temp store and populate entries. The harness lives outside the
   // packages workspace, so import the TypeScript sources via path.
-  const corePath = join(here, "..", "packages", "core", "src", "index.ts");
+  // Dynamic imports of absolute filesystem paths must be file URLs; a Windows
+  // absolute path ("d:\...") is otherwise parsed as an unsupported URL scheme.
+  const corePath = pathToFileURL(join(here, "..", "packages", "core", "src", "index.ts")).href;
   const { MemoryManager, JsonlStore, createSqliteStore } = await import(corePath);
 
   // Fail loudly before retrieval if the corpus cannot round-trip through the
   // production validator: silently dropping entries makes contradiction and
   // changed-file labels impossible to satisfy and invalidates every metric.
-  const schemasPath = join(here, "..", "packages", "core", "src", "memory", "schemas.ts");
+  const schemasPath = pathToFileURL(join(here, "..", "packages", "core", "src", "memory", "schemas.ts")).href;
   const { isValidMemoryEntry } = await import(schemasPath);
   const invalidIds = corpus.entries
     .filter((entry) => !isValidMemoryEntry(entry))
@@ -662,7 +664,7 @@ export async function evaluate(
 
   // Assert the persisted view is complete. MemoryRepository applies the same
   // validity gate as the engine; corruptLines counts rows it rejected.
-  const repoPath = join(here, "..", "packages", "core", "src", "memory", "repository.ts");
+  const repoPath = pathToFileURL(join(here, "..", "packages", "core", "src", "memory", "repository.ts")).href;
   const { MemoryRepository } = await import(repoPath);
   const repository = new MemoryRepository(store);
   const loadedView = await repository.loadAll();

@@ -10,8 +10,6 @@ permissions:
 jobs:
   core:
     name: ${{ matrix.os }} / Node ${{ matrix.node }}
-    # Windows is best-effort and not release-gating; failures remain visible.
-    continue-on-error: ${{ matrix.os == 'windows-latest' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false

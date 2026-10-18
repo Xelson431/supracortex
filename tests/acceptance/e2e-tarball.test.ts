@@ -11,7 +11,28 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 
 const run = promisify(execFile);
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
-const npmBin = process.platform === "win32" ? "npm.cmd" : "npm";
+const isWindows = process.platform === "win32";
+const npmBin = isWindows ? "npm.cmd" : "npm";
+
+/** Quote an argument for cmd.exe when the path may contain spaces. */
+function quoteWindowsArg(arg: string): string {
+  return /[\s"]/.test(arg) ? `"${arg.replace(/"/g, '""')}"` : arg;
+}
+
+/**
+ * Node 22 refuses to spawn a `.cmd` shim directly (EINVAL). Run it through the
+ * shell on Windows and quote arguments so scratch paths containing spaces
+ * survive; POSIX still executes npm directly.
+ */
+function runNpm(
+  args: string[],
+  opts: { cwd?: string; timeout?: number; env?: NodeJS.ProcessEnv },
+): Promise<{ stdout: string; stderr: string }> {
+  return run(npmBin, isWindows ? args.map(quoteWindowsArg) : args, {
+    ...opts,
+    shell: isWindows,
+  });
+}
 
 /** True when `p` is inside `root`, comparing canonical paths (macOS /var). */
 async function isUnder(p: string, root: string): Promise<boolean> {
@@ -111,7 +132,7 @@ async function resolveTarball(scratch: Scratch, cleanupDirs: string[]): Promise<
   const out = await mkdtemp(join(tmpdir(), "sc-pack-"));
   cleanupDirs.push(out);
   await run(process.execPath, ["scripts/build.ts"], { cwd: repoRoot, timeout: 120_000, env: childEnv(scratch) });
-  const packed = await run(npmBin, ["pack", "--json", "--pack-destination", out], {
+  const packed = await runNpm(["pack", "--json", "--pack-destination", out], {
     cwd: repoRoot,
     timeout: 120_000,
     env: childEnv(scratch),
@@ -177,7 +198,7 @@ test("isolated packed-artifact install gate (CLI + TUI + profile + MCP)", async 
   const cli = join(installedPkg, "dist", "cli.js");
   const profileDir = join(scratch.home, ".config", "supracode", "opencode");
 
-  await run(npmBin, ["install", tarball, "--no-audit", "--no-fund"], {
+  await runNpm(["install", tarball, "--no-audit", "--no-fund"], {
     cwd: scratch.project,
     timeout: 180_000,
     env,

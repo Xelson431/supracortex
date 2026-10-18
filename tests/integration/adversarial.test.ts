@@ -7,7 +7,7 @@ import test from "node:test";
 import assert from "node:assert";
 import { mkdtemp, writeFile, readdir, readFile, mkdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, relative } from "node:path";
 import { Engine, JsonlStore, resolveConfig } from "../../packages/core/src/index.ts";
 
 async function engineIn(overrides = {}) {
@@ -184,7 +184,9 @@ test("corrupted + partially-valid JSONL never throws and recovers valid rows", a
     `{bad json\n${good}\x00\x01 not json\n{"partial":\n` + good,
     "utf8",
   );
-  const res = await store.readJsonl(file.split(".supracortex/")[1]!);
+  // Derive the storage-relative key structurally; splitting on a POSIX
+  // separator yields undefined when Windows returns backslash paths.
+  const res = await store.readJsonl(relative(join(dir, ".supracortex"), file));
   assert.ok(res.corruptLines >= 2, "counts corrupt lines");
   assert.ok(res.entries.length >= 1, "recovers valid rows");
   // Search still works despite corruption.
